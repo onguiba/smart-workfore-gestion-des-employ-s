@@ -1,0 +1,13 @@
+{
+  "name": "smart-workforce-ai",
+  "version": "1.0.0",
+  "description": "Smart Workforce AI - Système de Gestion Intelligente des Employés",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["workforce", "ai", "hr", "attendance", "payroll"],
+  "author": "Smart Workforce AI",
+  "license": "MIT"
+}

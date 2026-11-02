@@ -1,0 +1,33 @@
+/* Import the Master Executive Professional Design System */
+@import url('professional-styles.css');
+
+/* Enhanced Core Overrides */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-body, #F8FAFC);
+  color: var(--text-main, #0F172A);
+  min-height: 100vh;
+}
+
+/* Glass Card Enhanced */
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05);
+  transition: all 0.25s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.active-nav-glow {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
+}

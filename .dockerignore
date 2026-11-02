@@ -1,0 +1,65 @@
+# ─── .dockerignore ───────────────────────────────────────────
+# Fichiers exclus du contexte de build Docker
+# (Réduit la taille de l'image et accélère le build)
+# ─────────────────────────────────────────────────────────────
+
+# Git
+.git
+.gitignore
+.github
+
+# Environnement (injecté à runtime, jamais dans l'image)
+.env
+.env.local
+.env.production
+*.env
+
+# Dépendances locales (reconstruites dans le container)
+node_modules
+*/node_modules
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Archives & builds locaux
+*.zip
+*.tar.gz
+dist/
+build/
+
+# Docker files (pas besoin dans l'image elle-même)
+Dockerfile*
+docker-compose*
+nginx/
+
+# Documentation
+README.md
+GUIDE_DEPLOIEMENT_HOSTINGER.md
+*.md
+
+# Scripts de packaging
+*.ps1
+*.bat
+*.sh
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Tests
+__tests__/
+*.test.js
+*.spec.js
+
+# Fichiers temporaires
+tmp/
+temp/
+scratch/

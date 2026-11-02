@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord - Smart Workforce</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .green { color: #28a745; }
+        .blue { color: #0d6efd; }
+        .red { color: #dc3545; }
+        .orange { color: #fd7e14; }
+
+        .employees-section {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .employee-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .employee-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .employee-item:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .employee-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .employee-info {
+            flex: 1;
+        }
+
+        .employee-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .employee-details {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-present {
+            background: #d4edda;
+            color: #28a745;
+        }
+
+        .status-absent {
+            background: #f8d7da;
+            color: #dc3545;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .employee-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Tableau de Bord</h1>
+        <a href="/home.html" class="btn btn-primary">← Retour</a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value green" id="totalEmployees">0</div>
+            <div class="stat-label">Total Employés</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value blue" id="presentCount">0</div>
+            <div class="stat-label">Présents</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value red" id="absentCount">0</div>
+            <div class="stat-label">Absents</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value orange" id="attendanceRate">0%</div>
+            <div class="stat-label">Taux de Présence</div>
+        </div>
+    </div>
+
+    <div class="employees-section">
+        <h2 class="section-title">Liste des Employés</h2>
+        <div class="employee-list" id="employeeList">
+            <div class="empty-state">
+                <div class="empty-icon">👥</div>
+                <p>Chargement...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Charger les données
+        async function loadData() {
+            try {
+                const response = await fetch('/api/employees');
+                const data = await response.json();
+
+                if (data.success && data.data.length > 0) {
+                    const employees = data.data;
+                    
+                    // Stats
+                    const present = employees.filter(e => e.status === 'present').length;
+                    const absent = employees.filter(e => e.status === 'absent').length;
+                    const rate = employees.length > 0 ? Math.round((present / employees.length) * 100) : 0;
+
+                    document.getElementById('totalEmployees').textContent = employees.length;
+                    document.getElementById('presentCount').textContent = present;
+                    document.getElementById('absentCount').textContent = absent;
+                    document.getElementById('attendanceRate').textContent = rate + '%';
+
+                    // Liste
+                    const list = document.getElementById('employeeList');
+                    list.innerHTML = employees.map(emp => {
+                        const initial = emp.name.charAt(0).toUpperCase();
+                        const status = emp.status === 'present' ? 'Présent' : 'Absent';
+                        const statusClass = emp.status === 'present' ? 'status-present' : 'status-absent';
+                        
+                        return `
+                            <div class="employee-item">
+                                <div class="employee-avatar">${initial}</div>
+                                <div class="employee-info">
+                                    <div class="employee-name">${emp.name}</div>
+                                    <div class="employee-details">${emp.position || emp.role} • ${emp.department}</div>
+                                </div>
+                                <span class="status-badge ${statusClass}">${status}</span>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    document.getElementById('employeeList').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">👤</div>
+                            <p>Aucun employé inscrit</p>
+                            <p style="font-size: 13px; margin-top: 8px;">
+                                <a href="/register.html" style="color: #667eea;">Inscrire le premier employé</a>
+                            </p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                document.getElementById('employeeList').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <p>Erreur de chargement</p>
+                    </div>
+                `;
+            }
+        }
+
+        loadData();
+
+        // Rafraîchir toutes les 30 secondes
+        setInterval(loadData, 30000);
+    </script>
+</body>
+</html>
