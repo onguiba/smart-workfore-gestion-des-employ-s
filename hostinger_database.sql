@@ -184,3 +184,4 @@ INSERT INTO `missions` (`title`, `description`, `agent`, `destination`, `status`
 ON DUPLICATE KEY UPDATE `title`=`title`;
 
 SET FOREIGN_KEY_CHECKS = 1;
+

@@ -96,7 +96,7 @@ class DatabaseManager {
   async init() {
     // S'assurer que le dossier data existe
     if (!fs.existsSync(DATA_DIR)) {
-      try { fs.mkdirSync(DATA_DIR, { recursive: true }); } catch (e) {}
+      try { fs.mkdirSync(DATA_DIR, { recursive: true }); } catch (e) { }
     }
 
     // Charger les données JSON de secours si existantes
@@ -695,7 +695,7 @@ class DatabaseManager {
           `INSERT INTO chat_messages (user_email, role, text) VALUES ($1, $2, $3)`,
           [msg.email || '', msg.role, msg.text]
         );
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (this.driver === 'mysql' && this.mysqlPool) {
@@ -704,7 +704,7 @@ class DatabaseManager {
           `INSERT INTO chat_messages (user_email, role, text) VALUES (?, ?, ?)`,
           [msg.email || '', msg.role, msg.text]
         );
-      } catch (e) {}
+      } catch (e) { }
     }
 
     return msg;
