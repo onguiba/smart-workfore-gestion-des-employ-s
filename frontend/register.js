@@ -1,4 +1,4 @@
-// Registration Page JavaScript
+﻿// Registration Page JavaScript
 let video = document.getElementById('video');
 let canvas = document.getElementById('canvas');
 let photoData = null;
@@ -202,7 +202,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
             });
             
             setTimeout(() => {
-                window.location.href = '/mon-compte.html';
+                window.location.href = 'mon-compte.html';
             }, 1500);
         } else {
             throw new Error(result.error || 'Erreur lors de l\'inscription');

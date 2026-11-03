@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3000/api';
+﻿const API_BASE = 'http://localhost:3000/api';
 
 // Leave type selection
 document.querySelectorAll('[class*="rounded-xl p-lg mb-md"]').forEach((option, index) => {
@@ -90,7 +90,7 @@ document.querySelectorAll('button').forEach(btn => {
         if (data.success) {
           showNotification('✓ Demande soumise avec succès!', 'success');
           setTimeout(() => {
-            window.location.href = '/leaves.html';
+            window.location.href = 'leaves.html';
           }, 1500);
         }
       } catch (error) {

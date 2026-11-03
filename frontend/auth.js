@@ -1,4 +1,4 @@
-// Authentication Helper Functions for Smart Workforce AI
+﻿// Authentication Helper Functions for Smart Workforce AI
 
 // Global SWA Auth object
 window.SWAAuth = {
@@ -42,7 +42,7 @@ window.SWAAuth = {
         localStorage.removeItem('swa_session');
         
         if (redirect) {
-            window.location.href = '/home.html';
+            window.location.href = 'home.html';
         }
     },
     
