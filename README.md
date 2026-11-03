@@ -1,31 +1,53 @@
-# 🏢 Smart Workforce AI
+# 🏢 Smart Workforce TSA
 
-> Application web moderne de gestion des employés avec pointage biométrique, géolocalisation GPS et suivi en temps réel.
+> Application web moderne de gestion des employés pour **TSA - Transport & Services d'Afrique** avec pointage biométrique, géolocalisation GPS et suivi en temps réel.
 
 [![Node.js](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Hostinger Ready](https://img.shields.io/badge/Hostinger-Ready-orange.svg)](README_HOSTINGER.md)
 
 ## 📋 Table des matières
 
 - [Fonctionnalités](#-fonctionnalités)
 - [Architecture](#-architecture)
 - [Installation](#-installation)
+- [Déploiement Hostinger](#-déploiement-hostinger)
 - [Utilisation](#-utilisation)
 - [API](#-api)
 - [Technologies](#-technologies)
 - [Contribution](#-contribution)
+
+## 🚀 Déploiement Hostinger
+
+✨ **Cette application est prête pour Hostinger !**
+
+📖 **Guide complet :** [README_HOSTINGER.md](README_HOSTINGER.md)
+
+### Installation rapide sur Hostinger
+
+1. **Téléchargez le ZIP** depuis GitHub
+2. **Uploadez** dans File Manager Hostinger
+3. **Extrayez** le contenu
+4. **Vérifiez** que `database.json` est présent
+5. **Configurez Node.js** dans le panneau Hostinger
+6. **Démarrez** l'application
+
+C'est tout ! 🎉
 
 ## ✨ Fonctionnalités
 
 ### 👤 Gestion des Employés
 - ✅ Inscription avec capture photo (webcam)
 - ✅ Géolocalisation GPS automatique
-- ✅ Génération automatique de matricule
+- ✅ Génération automatique de matricule et email
 - ✅ Espace personnel pour chaque employé
+- ✅ Dashboard RH avec demandes de congé
+- ✅ Assistant RH IA avec réponses automatiques
 
 ### ⏰ Pointage Intelligent
 - ✅ Pointage arrivée/départ avec photo
 - ✅ Enregistrement GPS précis
+- ✅ Validation faciale sans email obligatoire
 - ✅ Heure exacte et date
 - ✅ Historique des pointages
 
