@@ -1,9 +1,0 @@
-# Configuration Apache / LiteSpeed pour Hostinger
-DirectoryIndex index.html frontend/index.html frontend/home.html home.html
-
-<IfModule mod_rewrite.c>
-RewriteEngine On
-
-# Si la racine est demandée et frontend existe, rediriger proprement
-RewriteRule ^$ frontend/index.html [L]
-</IfModule>
