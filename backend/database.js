@@ -87,7 +87,7 @@ const SEED_DATA = {
 
 class DatabaseManager {
   constructor() {
-    this.driver = 'json'; // 'postgres', 'mysql', ou 'json'
+    this.driver = 'embedded'; // 'embedded' (défaut autonome), 'postgres', ou 'mysql'
     this.pgPool = null;
     this.mysqlPool = null;
     this.data = JSON.parse(JSON.stringify(SEED_DATA));
@@ -99,11 +99,11 @@ class DatabaseManager {
       try { fs.mkdirSync(DATA_DIR, { recursive: true }); } catch (e) { }
     }
 
-    // Charger les données JSON de secours si existantes
+    // Charger les données de la base intégrée
     this.loadFromDisk();
 
-    // 1. Tenter PostgreSQL si DATABASE_URL est fourni
-    if (process.env.DATABASE_URL) {
+    // 1. Tenter PostgreSQL UNIQUEMENT si explicitement demandé (DB_DRIVER=postgres)
+    if (process.env.DB_DRIVER === 'postgres' && process.env.DATABASE_URL) {
       try {
         const { Pool } = require('pg');
         const pool = new Pool({
@@ -112,7 +112,6 @@ class DatabaseManager {
           connectionTimeoutMillis: 5000
         });
 
-        // Test de connexion
         await pool.query('SELECT NOW()');
         this.pgPool = pool;
         this.driver = 'postgres';
@@ -121,43 +120,43 @@ class DatabaseManager {
         await this.loadPostgresData();
         return;
       } catch (err) {
-        console.warn('⚠️ Connexion PostgreSQL échouée, essai MySQL...', err.message);
+        console.warn('⚠️ Connexion PostgreSQL échouée, retour au mode intégré...', err.message);
       }
     }
 
-    // 2. Tenter MySQL si configuré (Hostinger / Docker)
-    const dbHost = process.env.DB_HOST || (process.env.MYSQL_DATABASE ? 'localhost' : null);
-    if (dbHost && (process.env.DB_USER || process.env.MYSQL_USER)) {
+    // 2. Tenter MySQL UNIQUEMENT si explicitement demandé (DB_DRIVER=mysql)
+    if (process.env.DB_DRIVER === 'mysql' && process.env.DB_HOST) {
       try {
         const mysql = require('mysql2/promise');
         const pool = mysql.createPool({
-          host: dbHost,
+          host: process.env.DB_HOST,
           port: parseInt(process.env.DB_PORT || '3306', 10),
-          user: process.env.DB_USER || process.env.MYSQL_USER || 'root',
-          password: process.env.DB_PASSWORD || process.env.MYSQL_PASSWORD || '',
-          database: process.env.DB_NAME || process.env.MYSQL_DATABASE || 'smartworkforce',
+          user: process.env.DB_USER || 'root',
+          password: process.env.DB_PASSWORD || '',
+          database: process.env.DB_NAME || 'smartworkforce',
           waitForConnections: true,
           connectionLimit: 10,
           queueLimit: 0,
           connectTimeout: 5000
         });
 
-        // Test de connexion
         await pool.query('SELECT 1');
         this.mysqlPool = pool;
         this.driver = 'mysql';
-        console.log(`✅ Base de Données : Connecté à MySQL (${dbHost})`);
+        console.log(`✅ Base de Données : Connecté à MySQL (${process.env.DB_HOST})`);
         await this.initMySQLSchema();
         await this.loadMySQLData();
         return;
       } catch (err) {
-        console.warn('⚠️ Connexion MySQL échouée, passage en mode JSON persistant...', err.message);
+        console.warn('⚠️ Connexion MySQL échouée, retour au mode intégré...', err.message);
       }
     }
 
-    // 3. Fallback persistant JSON
-    this.driver = 'json';
-    console.log('💾 Base de Données : Mode JSON persistant local actif (' + JSON_DB_FILE + ')');
+    // 3. Mode par défaut : Base de données intégrée autonome à l'application
+    this.driver = 'embedded';
+    console.log('📦 Base de Données : Mode INTÉGRÉ à l\'application actif');
+    console.log('📁 Fichier de données autonome : ' + JSON_DB_FILE);
+    console.log('⚡ Fonctionne directement dans l\'application : aucune configuration externe requise !');
     this.saveToDisk();
   }
 
@@ -173,6 +172,8 @@ class DatabaseManager {
       } catch (e) {
         console.error('Erreur lecture database.json:', e);
       }
+    } else {
+      this.saveToDisk();
     }
   }
 
