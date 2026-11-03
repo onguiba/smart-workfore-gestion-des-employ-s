@@ -18,84 +18,9 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
-// Mock database object
-const db = {
-  data: {
-    employees: [],
-    attendanceRecords: [],
-    attendanceSummary: null
-  },
-  getHRUsers: () => [],
-  getEmployees: () => [],
-  getTrackingAgents: () => [],
-  getMissions: () => [],
-  getLeaves: () => [],
-  getLeaveBalance: () => ({ annual: { total: 25, taken: 5, remaining: 20 }, rtt: { total: 10, taken: 2, remaining: 8 } }),
-  getPayroll: () => [{ id: 1, month: 'Mai 2026', grossSalary: 3500, netSalary: 2750, bonuses: 250, overtimeHours: 180 }],
-  getFraudAlerts: () => [],
-  saveToDisk: () => {}
-};
-
-// Mock API data - DONNÉES INITIALES VIDES (PAS DE COMPTES DE TEST)
-let mockData = {
-  user: null,
-  hrUsers: db.getHRUsers().length > 0 ? db.getHRUsers() : [
-    {
-      id: 'hr-1',
-      name: 'Sophie Laurent',
-      email: 'sophie.laurent@smartworkforce.ai',
-      role: 'Directrice des Ressources Humaines',
-      department: 'Direction RH',
-      phone: '+33 6 10 20 30 40',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
-      userType: 'hr',
-      matricule: 'SWA-DIR-01'
-    },
-    {
-      id: 'hr-2',
-      name: 'Marie Martin',
-      email: 'marie.martin@smartworkforce.ai',
-      role: 'Responsable Recrutement & Talents',
-      department: 'Ressources Humaines',
-      phone: '+33 6 98 76 54 32',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-      userType: 'hr',
-      matricule: 'SWA-HR-02'
-    }
-  ],
-  employees: db.getEmployees().length > 0 ? db.getEmployees() : [
-    { id: 1, name: 'Moussa Diop', role: 'Superviseur Logistique', department: 'Operations', status: 'present', email: 'moussa.diop@smartworkforce.ai', phone: '+33 6 45 89 12 30', joinDate: '2023-01-15', salary: 45000, checkinTime: '08:24', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80', userType: 'employee', matricule: 'SWA-8842' },
-    { id: 2, name: 'Jean Dupont', role: 'Architecte Cloud & Systèmes', department: 'IT', status: 'present', email: 'jean.dupont@smartworkforce.ai', phone: '+33 6 12 34 56 78', joinDate: '2022-05-20', salary: 52000, checkinTime: '08:55', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80', userType: 'employee', matricule: 'SWA-4910' },
-    { id: 3, name: 'Marie Martin', role: 'Responsable Recrutement & Talents', department: 'HR', status: 'late', email: 'marie.martin@smartworkforce.ai', phone: '+33 6 98 76 54 32', joinDate: '2023-03-10', salary: 48000, checkinTime: '09:42', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', userType: 'employee', matricule: 'SWA-3301' },
-    { id: 4, name: 'Daniel Gomis', role: 'Chauffeur Poids Lourd', department: 'Logistics', status: 'present', email: 'daniel.gomis@smartworkforce.ai', phone: '+33 6 55 44 33 22', joinDate: '2023-06-01', salary: 42000, checkinTime: '07:50', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80', userType: 'employee', matricule: 'SWA-7219' },
-    { id: 5, name: 'Lucas Mercier', role: 'Account Executive B2B', department: 'Sales', status: 'present', email: 'lucas.mercier@smartworkforce.ai', phone: '+33 6 77 88 99 00', joinDate: '2023-07-15', salary: 50000, checkinTime: '08:40', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80', userType: 'employee', matricule: 'SWA-5541' },
-    { id: 6, name: 'Sarah Perez', role: 'Chef de Produit IA', department: 'Marketing', status: 'absent', email: 'sarah.perez@smartworkforce.ai', phone: '+33 6 33 22 11 00', joinDate: '2023-08-20', salary: 47000, checkinTime: '-', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80', userType: 'employee', matricule: 'SWA-6022' }
-  ],
-  attendanceRecords: (db.data && db.data.attendanceRecords) || [],
-  attendance: (db.data && db.data.attendanceSummary) || {
-    present: 142,
-    absent: 8,
-    onMission: 24,
-    late: 12,
-    rate: 94.7
-  },
-  trackingAgents: db.getTrackingAgents(),
-  missions: db.getMissions(),
-  leaves: db.getLeaves(),
-  leaveBalance: db.getLeaveBalance(),
-  performance: {
-    punctuality: 96,
-    productivity: 91,
-    teamwork: 94,
-    overall: 94,
-    week: [90, 92, 95, 94, 96]
-  },
-  payroll: db.getPayroll(),
-  fraudAlerts: db.getFraudAlerts(),
-  chatMessages: [
-    { role: 'assistant', text: 'Bonjour ! Je suis l\'Assistant RH IA SmartWorkforce. Comment puis-je vous aider aujourd\'hui (congés, pointage, fiches de paie, missions, plannings) ?' }
-  ]
-};
+// Database Manager Universel (PostgreSQL Neon / MySQL Hostinger / JSON persistant)
+const db = require('./database');
+let mockData = db.data;
 
 const server = http.createServer((req, res) => {
   // Parse URL
@@ -306,27 +231,7 @@ function handleAPI(pathname, req, res) {
       res.end(JSON.stringify({ success: false, error: 'Mission not found' }));
     }
   }
-  else if (pathname === '/api/attendance/checkin') {
-    if (req.method === 'POST') {
-      mockData.attendance.present++;
-      res.writeHead(200);
-      res.end(JSON.stringify({ 
-        success: true, 
-        message: 'Check-in recorded successfully',
-        timestamp: new Date().toISOString()
-      }));
-    }
-  } 
-  else if (pathname === '/api/attendance/checkout') {
-    if (req.method === 'POST') {
-      res.writeHead(200);
-      res.end(JSON.stringify({ 
-        success: true, 
-        message: 'Check-out recorded successfully',
-        timestamp: new Date().toISOString()
-      }));
-    }
-  }
+
   else if (pathname === '/api/leaves') {
     res.writeHead(200);
     res.end(JSON.stringify({ success: true, data: mockData.leaves }));
@@ -625,7 +530,7 @@ function handleAPI(pathname, req, res) {
   else if (pathname === '/api/employees/register' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
-    req.on('end', () => {
+    req.on('end', async () => {
       try {
         const data = JSON.parse(body);
         
@@ -660,12 +565,9 @@ function handleAPI(pathname, req, res) {
           createdAt: new Date().toISOString()
         };
         
-        mockData.employees.push(newEmployee);
-        mockData.attendance.present++;
-        if (db && db.data) {
-          db.data.employees = mockData.employees;
-          db.saveToDisk();
-        }
+        // Persistance DB (PostgreSQL / MySQL / JSON)
+        await db.addEmployee(newEmployee);
+        mockData = db.data;
         
         console.log(`✅ Nouvel employé inscrit: ${newEmployee.name} (${newEmployee.email})`);
         console.log(`📍 Localisation: Lat ${data.location.latitude}, Long ${data.location.longitude}`);
@@ -716,7 +618,7 @@ function handleAPI(pathname, req, res) {
   else if (pathname === '/api/attendance/checkin' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
-    req.on('end', () => {
+    req.on('end', async () => {
       try {
         const data = JSON.parse(body);
         
@@ -734,22 +636,9 @@ function handleAPI(pathname, req, res) {
           timestamp: new Date().toISOString()
         };
         
-        mockData.attendanceRecords.push(attendanceRecord);
-        
-        // Mettre à jour l'employé
-        const employee = mockData.employees.find(e => e.email === data.employeeEmail);
-        if (employee) {
-          employee.checkInTime = data.checkInTimeFormatted;
-          employee.checkInLocation = data.location;
-          employee.status = 'present';
-        }
-        
+        await db.addAttendanceRecord(attendanceRecord);
+        mockData = db.data;
         mockData.attendance.present++;
-        if (db && db.data) {
-          db.data.attendanceRecords = mockData.attendanceRecords;
-          db.data.employees = mockData.employees;
-          db.saveToDisk();
-        }
         
         console.log(`✅ Pointage arrivée: ${data.employeeEmail}`);
         console.log(`⏰ Heure: ${data.checkInTimeFormatted}`);
@@ -773,7 +662,7 @@ function handleAPI(pathname, req, res) {
   else if (pathname === '/api/attendance/checkout' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
-    req.on('end', () => {
+    req.on('end', async () => {
       try {
         const data = JSON.parse(body);
         
@@ -791,21 +680,8 @@ function handleAPI(pathname, req, res) {
           timestamp: new Date().toISOString()
         };
         
-        mockData.attendanceRecords.push(attendanceRecord);
-        
-        // Mettre à jour l'employé
-        const employee = mockData.employees.find(e => e.email === data.employeeEmail);
-        if (employee) {
-          employee.checkOutTime = data.checkOutTimeFormatted;
-          employee.checkOutLocation = data.location;
-          employee.status = 'absent';
-        }
-        
-        if (db && db.data) {
-          db.data.attendanceRecords = mockData.attendanceRecords;
-          db.data.employees = mockData.employees;
-          db.saveToDisk();
-        }
+        await db.addAttendanceRecord(attendanceRecord);
+        mockData = db.data;
         
         console.log(`🚪 Pointage départ: ${data.employeeEmail}`);
         console.log(`⏰ Heure: ${data.checkOutTimeFormatted}`);
@@ -839,14 +715,23 @@ function handleAPI(pathname, req, res) {
   }
 }
 
-// Start server
-server.listen(PORT, () => {
-  console.log(`
+// Start server after DB initialization
+async function startServer() {
+  try {
+    await db.init();
+    mockData = db.data;
+  } catch (err) {
+    console.error('Erreur initialisation DB:', err);
+  }
+
+  server.listen(PORT, () => {
+    console.log(`
 ╔════════════════════════════════════════════════════════════════════╗
 ║                                                                    ║
 ║       🎉 Smart Workforce AI - NOUVEAU SYSTÈME ! 🎉                 ║
 ║                                                                    ║
 ║   🌐 URL: http://localhost:${PORT}                            ║
+║   🗄️  Base de Données: ${db.driver.toUpperCase().padEnd(43)}║
 ║                                                                    ║
 ║   ✨ NOUVEAUTÉS :                                                  ║
 ║   ├─ 📸 /register.html       - Inscription (Caméra + GPS)          ║
@@ -865,16 +750,19 @@ server.listen(PORT, () => {
 ║                                                                    ║
 ╚════════════════════════════════════════════════════════════════════╝
   `);
-  console.log(`✅ Serveur lancé avec succès !`);
-  console.log(`🔗 Ouvrez votre navigateur sur : http://localhost:${PORT}`);
-  console.log(``);
-  console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-  console.log(`🎯 NOUVEAU : Plus de comptes de test !`);
-  console.log(`   1. Inscrivez-vous : http://localhost:${PORT}/register.html`);
-  console.log(`   2. Pointez : http://localhost:${PORT}/attendance.html`);
-  console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-  console.log(``);
-});
+    console.log(`✅ Serveur lancé avec succès !`);
+    console.log(`🔗 Ouvrez votre navigateur sur : http://localhost:${PORT}`);
+    console.log(``);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    console.log(`🎯 BASE DE DONNÉES ACTIVE : [${db.driver.toUpperCase()}]`);
+    console.log(`   - Employés chargés : ${mockData.employees.length}`);
+    console.log(`   - Enregistrements pointage : ${mockData.attendanceRecords.length}`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    console.log(``);
+  });
+}
+
+startServer();
 
 // Handle errors
 server.on('error', (err) => {
