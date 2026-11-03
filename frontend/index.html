@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-950">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSA — Transport & Services d'Afrique | Portail Collaborateurs</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        tsa: {
+                            blue: '#1963b6',
+                            darkblue: '#0e3a6c',
+                            bronze: '#b86828',
+                            lightbronze: '#d4833e',
+                            slate: '#0f172a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Design System CSS -->
+    <link rel="stylesheet" href="professional-styles.css">
+
+    <style>
+        .tsa-glow {
+            box-shadow: 0 0 35px rgba(25, 99, 182, 0.25), 0 0 15px rgba(184, 104, 40, 0.15);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.4), 0 0 20px rgba(25, 99, 182, 0.2);
+        }
+        .ambient-grid {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="min-h-full font-sans antialiased text-slate-100 bg-slate-950 ambient-grid flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+    <!-- Top Executive Header -->
+    <header class="w-full border-b border-white/10 bg-slate-900/80 backdrop-blur-xl px-4 lg:px-8 py-3 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            
+            <!-- TSA Brand Header -->
+            <a href="home.html" class="flex items-center gap-3.5 group">
+                <div class="p-1.5 rounded-xl bg-slate-900 border border-white/10 shadow-md group-hover:border-blue-500/50 transition flex items-center justify-center">
+                    <img src="image/tsa.jpeg" alt="TSA Logo" class="h-10 w-auto object-contain drop-shadow">
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-extrabold text-lg tracking-tight text-white">TSA</span>
+                        <span class="text-[10px] font-bold uppercase bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-md">Logistique & Transport</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Transport & Services d'Afrique — Système de Gestion des Employés</p>
+                </div>
+            </a>
+
+            <!-- System Indicators & Navigation -->
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/80 border border-white/10 text-xs text-slate-300">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="font-mono text-[11px]">Serveur Central Opérationnel</span>
+                </div>
+
+                <a href="employee-portal.html" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-500/20 transition flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-base">face_retouching_natural</span>
+                    <span>Scan Facial 3D</span>
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 flex flex-col justify-center">
+
+        <!-- Central TSA Hero Banner -->
+        <div class="text-center max-w-2xl mx-auto mb-10 animate-fade-in">
+            
+            <!-- Large Prominent TSA Logo Display -->
+            <div class="inline-block p-4 sm:p-5 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl tsa-glow mb-6 transform hover:scale-105 transition-transform duration-300">
+                <img src="image/tsa.jpeg" alt="TSA - Transport & Services d'Afrique" class="h-16 sm:h-20 w-auto object-contain mx-auto">
+            </div>
+
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping"></span>
+                <span>PORTAIL RH & GESTION DU PERSONNEL TERRAIN</span>
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Plateforme des Collaborateurs <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-amber-400 bg-clip-text text-transparent">TSA</span>
+            </h1>
+            <p class="text-sm text-slate-400 mt-2.5 max-w-xl mx-auto">
+                Bienvenue sur l'infrastructure de gestion des effectifs, pointage biométrique, suivi des missions et télémétrie des équipes de Transport & Services d'Afrique.
+            </p>
+        </div>
+
+        <!-- Section Utilisateur Connecté (Affiché dynamiquement si session active) -->
+        <div id="userConnected" class="mb-8 hidden animate-slide-up">
+            <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 border border-blue-500/30 rounded-2xl p-5 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5 text-center sm:text-left">
+                    <div class="relative">
+                        <img id="userAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-12 h-12 rounded-full object-cover ring-2 ring-blue-500/50 shadow" alt="Collaborateur">
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-slate-900"></span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-blue-400 uppercase tracking-wider">Session Active TSA</p>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2 justify-center sm:justify-start">
+                            <span>Bonjour, <span id="userName">Collaborateur</span></span>
+                            <span id="userBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Connecté</span>
+                        </h2>
+                        <p id="userRole" class="text-xs text-slate-400">Poste / Fonction</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                    <a href="mon-compte.html" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5">
+                        <span class="material-symbols-outlined text-base">person</span>
+                        <span>Mon Espace Personnel</span>
+                    </a>
+                    <button onclick="logout()" class="px-3 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 font-bold text-xs transition flex items-center justify-center gap-1" title="Se déconnecter">
+                        <span class="material-symbols-outlined text-base">logout</span>
+                        <span class="hidden sm:inline">Déconnexion</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 Primary Action Cards Grid (High-End Professional Redesign) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+            
+            <!-- CARD 1: Nouvel Employé (Inscription) -->
+            <a href="register.html" class="action-card bg-slate-900/90 border border-white/10 hover:border-emerald-500/50 rounded-3xl p-6 transition-all duration-300 card-hover group shadow-xl relative overflow-hidden backdrop-blur-xl">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition"></div>
+                
+                <div class="flex items-start gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">person_add</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-bold text-lg text-white group-hover:text-emerald-300 transition">Nouvel Employé</h3>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Onboarding</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                            Inscription numérique des nouveaux collaborateurs TSA avec capture de photo d'identité par webcam et géolocalisation GPS.
+                        </p>
+                        <div class="flex items-center gap-2 text-xs font-semibold text-emerald-400 group-hover:translate-x-1 transition-transform">
+                            <span>Ouvrir le formulaire d'inscription</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- CARD 2: Pointage Quotidien (Arrivée & Départ) -->
+            <a href="attendance.html" class="action-card bg-slate-900/90 border border-white/10 hover:border-blue-500/50 rounded-3xl p-6 transition-all duration-300 card-hover group shadow-xl relative overflow-hidden backdrop-blur-xl">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition"></div>
+                
+                <div class="flex items-start gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">fingerprint</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-bold text-lg text-white group-hover:text-blue-300 transition">Pointage des Présences</h3>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20">Biométrique</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                            Enregistrement horodaté de votre prise de service et fin de poste avec reconnaissance faciale ou vérification photo sécurisée.
+                        </p>
+                        <div class="flex items-center gap-2 text-xs font-semibold text-blue-400 group-hover:translate-x-1 transition-transform">
+                            <span>Pointer ma présence aujourd'hui</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- CARD 3: Tableau de Bord RH & Supervision -->
+            <a href="dashboard.html" class="action-card bg-slate-900/90 border border-white/10 hover:border-amber-500/50 rounded-3xl p-6 transition-all duration-300 card-hover group shadow-xl relative overflow-hidden backdrop-blur-xl">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition"></div>
+                
+                <div class="flex items-start gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">dashboard</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-bold text-lg text-white group-hover:text-amber-300 transition">Tableau de Bord RH</h3>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">Direction TSA</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                            Supervision globale en temps réel : registre des effectifs, taux de ponctualité, validation des congés et gestion des salaires.
+                        </p>
+                        <div class="flex items-center gap-2 text-xs font-semibold text-amber-400 group-hover:translate-x-1 transition-transform">
+                            <span>Accéder à la base de données RH</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- CARD 4: Suivi Flotte & Télémétrie Logistique -->
+            <a href="tracking.html" class="action-card bg-slate-900/90 border border-white/10 hover:border-cyan-500/50 rounded-3xl p-6 transition-all duration-300 card-hover group shadow-xl relative overflow-hidden backdrop-blur-xl">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 transition"></div>
+                
+                <div class="flex items-start gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">local_shipping</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-bold text-lg text-white group-hover:text-cyan-300 transition">Suivi Flotte & Missions</h3>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Logistique</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                            Cartographie interactive GPS, zones de géofencing, vitesse des chauffeurs poids lourds et dispatching des livraisons client.
+                        </p>
+                        <div class="flex items-center gap-2 text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">
+                            <span>Afficher la carte de télémétrie</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Quick Access Sub-Modules Pill Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+            <a href="payroll.html" class="p-3.5 rounded-2xl bg-slate-900/60 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white transition flex items-center gap-3 text-xs font-semibold">
+                <span class="material-symbols-outlined text-lg text-emerald-400">receipt_long</span>
+                <span>Fiches de Paie</span>
+            </a>
+            <a href="leaves.html" class="p-3.5 rounded-2xl bg-slate-900/60 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white transition flex items-center gap-3 text-xs font-semibold">
+                <span class="material-symbols-outlined text-lg text-blue-400">calendar_month</span>
+                <span>Soldes Congés</span>
+            </a>
+            <a href="chat.html" class="p-3.5 rounded-2xl bg-slate-900/60 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white transition flex items-center gap-3 text-xs font-semibold">
+                <span class="material-symbols-outlined text-lg text-amber-400">smart_toy</span>
+                <span>Assistant IA</span>
+            </a>
+            <a href="fraud-detection.html" class="p-3.5 rounded-2xl bg-slate-900/60 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white transition flex items-center gap-3 text-xs font-semibold">
+                <span class="material-symbols-outlined text-lg text-rose-400">shield</span>
+                <span>Anti-Fraude SOC</span>
+            </a>
+        </div>
+
+        <!-- Section Connexion Rapide (Si non connecté) -->
+        <div id="loginSection" class="bg-slate-900/80 border border-white/10 rounded-3xl p-6 sm:p-7 shadow-2xl mb-8 backdrop-blur-xl">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+                <div>
+                    <h3 class="font-bold text-base text-white">Déjà Collaborateur TSA ? Connexion Rapide</h3>
+                    <p class="text-xs text-slate-400">Saisissez votre adresse email professionnelle pour ouvrir directement votre espace.</p>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-blue-400">
+                    <span class="material-symbols-outlined text-sm">lock</span>
+                    <span>Accès chiffré</span>
+                </div>
+            </div>
+
+            <!-- Email Input Bar -->
+            <div class="flex flex-col sm:flex-row gap-2.5">
+                <div class="relative flex-1">
+                    <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-lg">mail</span>
+                    <input type="email" id="loginEmail" placeholder="moussa.diop@smartworkforce.ai"
+                        class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition font-mono">
+                </div>
+                <button onclick="quickLogin()" class="py-3 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+                    <span>Se Connecter</span>
+                    <span class="material-symbols-outlined text-base">login</span>
+                </button>
+            </div>
+
+            <!-- Demo Quick Fill Pills -->
+            <div class="mt-3.5 pt-3 border-t border-white/5 flex flex-wrap items-center gap-2 text-xs">
+                <span class="text-slate-500 text-[11px]">Comptes Démo TSA :</span>
+                <button type="button" onclick="fillEmail('moussa.diop@smartworkforce.ai')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 text-[11px] transition">
+                    Moussa Diop (Logistique)
+                </button>
+                <button type="button" onclick="fillEmail('daniel.gomis@smartworkforce.ai')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 text-[11px] transition">
+                    Daniel Gomis (Poids Lourd)
+                </button>
+                <button type="button" onclick="fillEmail('sophie.laurent@smartworkforce.ai')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 text-[11px] transition">
+                    Sophie Laurent (Direction RH)
+                </button>
+            </div>
+        </div>
+
+        <!-- Live Statistics Bar (Connectée à la base de données) -->
+        <div class="bg-slate-900/60 border border-white/10 rounded-2xl p-5 shadow-xl">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+                <div class="text-center pt-2 sm:pt-0">
+                    <span id="totalEmployees" class="text-2xl sm:text-3xl font-extrabold text-blue-400 font-mono">6</span>
+                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">Effectif Total TSA</p>
+                </div>
+                <div class="text-center pt-2 sm:pt-0">
+                    <span id="presentToday" class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">5</span>
+                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">Collaborateurs Présents</p>
+                </div>
+                <div class="text-center pt-2 sm:pt-0">
+                    <span id="activeMissions" class="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">4</span>
+                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">Missions Logistiques</p>
+                </div>
+                <div class="text-center pt-2 sm:pt-0">
+                    <span id="fleetPunctuality" class="text-2xl sm:text-3xl font-extrabold text-cyan-400 font-mono">94.7%</span>
+                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">Taux de Ponctualité</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Professional Footer -->
+    <footer class="w-full border-t border-white/10 bg-slate-950 px-4 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <img src="image/tsa.jpeg" alt="TSA" class="h-6 w-auto opacity-75">
+                <span>© 2026 TSA — Transport & Services d'Afrique. Tous droits réservés.</span>
+            </div>
+            <div class="flex items-center gap-4 text-slate-400">
+                <a href="index.html" class="hover:text-white transition">Hub Exécutif</a>
+                <span>•</span>
+                <a href="employee-portal.html" class="hover:text-white transition">Espace Employé</a>
+                <span>•</span>
+                <a href="dashboard.html" class="hover:text-white transition">Dashboard RH</a>
+                <span>•</span>
+                <a href="employee-portal.html" class="hover:text-white transition">Face ID 3D</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Toast Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-[9999] flex flex-col gap-2 pointer-events-none"></div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Check user session
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            const session = (window.SWAAuth && window.SWAAuth.getSession()) || currentUser;
+
+            if (session) {
+                document.getElementById('userConnected').classList.remove('hidden');
+                document.getElementById('userName').textContent = session.name || 'Collaborateur';
+                document.getElementById('userRole').textContent = (session.role || session.travail || 'Collaborateur TSA') + (session.department ? ' • ' + session.department : '');
+                
+                if (session.avatar && document.getElementById('userAvatar')) {
+                    document.getElementById('userAvatar').src = session.avatar;
+                }
+                if (session.userType === 'hr') {
+                    document.getElementById('userBadge').className = 'text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30';
+                    document.getElementById('userBadge').textContent = 'Direction RH';
+                }
+            } else {
+                document.getElementById('loginSection').classList.remove('hidden');
+            }
+
+            // Load live statistics from backend database
+            loadStats();
+        });
+
+        function fillEmail(email) {
+            document.getElementById('loginEmail').value = email;
+        }
+
+        async function quickLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            if (!email) {
+                showToast('Veuillez entrer votre email professionnel', 'warning');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/employees/identify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.employee) {
+                    localStorage.setItem('currentUser', JSON.stringify(result.employee));
+                    if (window.SWAAuth) {
+                        window.SWAAuth.setSession(result.employee);
+                    }
+                    showToast('Connexion réussie ! Redirection...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/mon-compte.html';
+                    }, 600);
+                } else {
+                    // Try looking in accounts endpoint
+                    const accRes = await fetch('/api/auth/accounts');
+                    const accData = await accRes.json();
+                    const found = (accData.employees || []).find(e => e.email.toLowerCase() === email.toLowerCase()) ||
+                                  (accData.hrUsers || []).find(h => h.email.toLowerCase() === email.toLowerCase());
+                    
+                    if (found) {
+                        localStorage.setItem('currentUser', JSON.stringify(found));
+                        if (window.SWAAuth) window.SWAAuth.setSession(found);
+                        showToast('Connexion réussie ! Redirection...', 'success');
+                        setTimeout(() => {
+                            window.location.href = found.userType === 'hr' ? '/dashboard.html' : '/mon-compte.html';
+                        }, 600);
+                    } else {
+                        showToast('Email non trouvé. Vous pouvez vous inscrire via le bouton Nouvel Employé.', 'warning');
+                    }
+                }
+            } catch (error) {
+                showToast('Erreur de connexion', 'error');
+                console.error(error);
+            }
+        }
+
+        function logout() {
+            if (window.SWAAuth) {
+                window.SWAAuth.logout(false);
+            } else {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('swa_session');
+                window.location.reload();
+            }
+        }
+
+        function loadStats() {
+            fetch('/api/employees')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && Array.isArray(data.data)) {
+                        document.getElementById('totalEmployees').textContent = data.data.length;
+                        const present = data.data.filter(e => e.status === 'present').length;
+                        document.getElementById('presentToday').textContent = present;
+                    }
+                })
+                .catch(err => console.warn('Stats fetch:', err));
+        }
+
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            let bg = 'bg-slate-900 border-white/20 text-white';
+            let icon = 'info';
+            if (type === 'success') {
+                bg = 'bg-emerald-950/90 border-emerald-500/40 text-emerald-200';
+                icon = 'check_circle';
+            } else if (type === 'warning') {
+                bg = 'bg-amber-950/90 border-amber-500/40 text-amber-200';
+                icon = 'warning';
+            } else if (type === 'error') {
+                bg = 'bg-rose-950/90 border-rose-500/40 text-rose-200';
+                icon = 'error';
+            }
+
+            toast.className = `p-3.5 rounded-2xl border shadow-2xl flex items-center gap-3 text-xs max-w-sm pointer-events-auto backdrop-blur-md animate-slide-up ${bg}`;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-lg">${icon}</span>
+                <span class="font-medium">${msg}</span>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>

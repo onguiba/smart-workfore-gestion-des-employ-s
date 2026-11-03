@@ -1,50 +1,9 @@
-# Configuration pour Smart Workforce TSA sur Hostinger
+# Configuration Apache / LiteSpeed pour Hostinger
+DirectoryIndex index.html frontend/index.html frontend/home.html home.html
 
-# Rediriger toutes les requêtes vers index.html pour le routing
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /
-    
-    # Rediriger le domaine racine vers /frontend/home.html
-    RewriteRule ^$ /frontend/home.html [L]
-    
-    # Ne pas rediriger les fichiers existants
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    
-    # Rediriger les requêtes API vers le backend
-    RewriteRule ^api/(.*)$ /backend/server.js [L,QSA]
+RewriteEngine On
+
+# Si la racine est demandée et frontend existe, rediriger proprement
+RewriteRule ^$ frontend/index.html [L]
 </IfModule>
-
-# Autoriser CORS pour les API
-<IfModule mod_headers.c>
-    Header set Access-Control-Allow-Origin "*"
-    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
-</IfModule>
-
-# Types MIME
-AddType application/json .json
-AddType image/svg+xml .svg
-AddType image/jpeg .jpeg .jpg
-AddType image/png .png
-
-# Sécurité
-<FilesMatch "\.json$">
-    Order allow,deny
-    Allow from all
-</FilesMatch>
-
-# Cache
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType image/jpeg "access plus 1 month"
-    ExpiresByType image/png "access plus 1 month"
-    ExpiresByType image/svg+xml "access plus 1 month"
-    ExpiresByType text/css "access plus 1 week"
-    ExpiresByType application/javascript "access plus 1 week"
-</IfModule>
-
-# Protection
-Options -Indexes
-ServerSignature Off
