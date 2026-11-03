@@ -18,9 +18,25 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
-const db = require('./db.js');
+// Mock database object
+const db = {
+  data: {
+    employees: [],
+    attendanceRecords: [],
+    attendanceSummary: null
+  },
+  getHRUsers: () => [],
+  getEmployees: () => [],
+  getTrackingAgents: () => [],
+  getMissions: () => [],
+  getLeaves: () => [],
+  getLeaveBalance: () => ({ annual: { total: 25, taken: 5, remaining: 20 }, rtt: { total: 10, taken: 2, remaining: 8 } }),
+  getPayroll: () => [{ id: 1, month: 'Mai 2026', grossSalary: 3500, netSalary: 2750, bonuses: 250, overtimeHours: 180 }],
+  getFraudAlerts: () => [],
+  saveToDisk: () => {}
+};
 
-// Database layer: initialize with persistent data from db.js & Hostinger MySQL
+// Mock API data - DONNÉES INITIALES VIDES (PAS DE COMPTES DE TEST)
 let mockData = {
   user: null,
   hrUsers: db.getHRUsers().length > 0 ? db.getHRUsers() : [

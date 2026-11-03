@@ -128,9 +128,24 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         return;
     }
     
+    // Générer un email automatique si non fourni
+    let userEmail = document.getElementById('email').value.trim();
+    const fullName = document.getElementById('fullName').value;
+    
+    if (!userEmail) {
+        // Créer un email automatique basé sur le nom
+        const nameParts = fullName.toLowerCase().trim().split(' ');
+        const firstName = nameParts[0] || 'employe';
+        const lastName = nameParts[nameParts.length - 1] || '';
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        userEmail = `${firstName}.${lastName}${randomNum}@smartworkforce.ai`;
+        
+        showAlert(`📧 Email généré automatiquement: ${userEmail}`, 'success');
+    }
+    
     const formData = {
-        fullName: document.getElementById('fullName').value,
-        email: document.getElementById('email').value,
+        fullName: fullName,
+        email: userEmail,
         phone: document.getElementById('phone').value,
         position: document.getElementById('position').value,
         department: document.getElementById('department').value,
@@ -215,14 +230,21 @@ function showAlert(message, type) {
 
 // Validate form inputs
 document.getElementById('email').addEventListener('blur', function() {
-    const email = this.value;
+    const email = this.value.trim();
+    
+    // Si l'email est vide, c'est OK (optionnel)
+    if (!email) {
+        this.style.borderColor = '#e0e0e0';
+        return;
+    }
+    
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     
     if (!emailPattern.test(email)) {
-        this.style.borderColor = 'red';
-        showAlert('Format d\'email invalide', 'error');
+        this.style.borderColor = 'orange';
+        showAlert('Format d\'email invalide (sera généré automatiquement si vide)', 'warning');
     } else {
-        this.style.borderColor = '#e0e0e0';
+        this.style.borderColor = 'green';
     }
 });
 

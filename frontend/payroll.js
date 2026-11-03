@@ -127,7 +127,7 @@ function runAiPayrollCalculation() {
 }
 
 function downloadAllPayslips() {
-  showToast('Génération de l\\'archive ZIP des 6 bulletins certifiés...', 'info');
+  showToast('Génération de l\'archive ZIP des 6 bulletins certifiés...', 'info');
   setTimeout(() => {
     showToast('✓ Archive ZIP téléchargée avec succès', 'success');
   }, 1500);

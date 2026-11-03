@@ -63,7 +63,7 @@
             <!-- TSA Brand Header -->
             <a href="home.html" class="flex items-center gap-3.5 group">
                 <div class="p-1.5 rounded-xl bg-slate-900 border border-white/10 shadow-md group-hover:border-blue-500/50 transition flex items-center justify-center">
-                    <img src="tsa-logo.png" alt="TSA Logo" class="h-10 w-auto object-contain drop-shadow">
+                    <img src="image/tsa.jpeg" alt="TSA Logo" class="h-10 w-auto object-contain drop-shadow">
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
@@ -98,7 +98,7 @@
             
             <!-- Large Prominent TSA Logo Display -->
             <div class="inline-block p-4 sm:p-5 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl tsa-glow mb-6 transform hover:scale-105 transition-transform duration-300">
-                <img src="tsa-logo.png" alt="TSA - Transport & Services d'Afrique" class="h-16 sm:h-20 w-auto object-contain mx-auto">
+                <img src="image/tsa.jpeg" alt="TSA - Transport & Services d'Afrique" class="h-16 sm:h-20 w-auto object-contain mx-auto">
             </div>
 
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-3">
@@ -197,7 +197,7 @@
             </a>
 
             <!-- CARD 3: Tableau de Bord RH & Supervision -->
-            <a href="enhanced-dashboard.html" class="action-card bg-slate-900/90 border border-white/10 hover:border-amber-500/50 rounded-3xl p-6 transition-all duration-300 card-hover group shadow-xl relative overflow-hidden backdrop-blur-xl">
+            <a href="dashboard.html" class="action-card bg-slate-900/90 border border-white/10 hover:border-amber-500/50 rounded-3xl p-6 transition-all duration-300 card-hover group shadow-xl relative overflow-hidden backdrop-blur-xl">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition"></div>
                 
                 <div class="flex items-start gap-4">
@@ -335,7 +335,7 @@
     <footer class="w-full border-t border-white/10 bg-slate-950 px-4 py-6 text-center text-xs text-slate-500">
         <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
             <div class="flex items-center gap-2">
-                <img src="tsa-logo.png" alt="TSA" class="h-6 w-auto opacity-75">
+                <img src="image/tsa.jpeg" alt="TSA" class="h-6 w-auto opacity-75">
                 <span>© 2026 TSA — Transport & Services d'Afrique. Tous droits réservés.</span>
             </div>
             <div class="flex items-center gap-4 text-slate-400">
@@ -343,7 +343,7 @@
                 <span>•</span>
                 <a href="employee-portal.html" class="hover:text-white transition">Espace Employé</a>
                 <span>•</span>
-                <a href="enhanced-dashboard.html" class="hover:text-white transition">Dashboard RH</a>
+                <a href="dashboard.html" class="hover:text-white transition">Dashboard RH</a>
                 <span>•</span>
                 <a href="employee-portal.html" class="hover:text-white transition">Face ID 3D</a>
             </div>
@@ -421,7 +421,7 @@
                         if (window.SWAAuth) window.SWAAuth.setSession(found);
                         showToast('Connexion réussie ! Redirection...', 'success');
                         setTimeout(() => {
-                            window.location.href = found.userType === 'hr' ? '/enhanced-dashboard.html' : '/mon-compte.html';
+                            window.location.href = found.userType === 'hr' ? '/dashboard.html' : '/mon-compte.html';
                         }, 600);
                     } else {
                         showToast('Email non trouvé. Vous pouvez vous inscrire via le bouton Nouvel Employé.', 'warning');

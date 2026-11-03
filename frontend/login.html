@@ -163,7 +163,7 @@
         <div class="mb-8 text-center animate-fade-up">
             <a href="home.html" class="inline-flex items-center gap-3 group">
                 <div class="p-2 rounded-2xl bg-slate-900/80 border border-white/10 group-hover:border-blue-500/40 transition">
-                    <img src="tsa-logo.png" alt="TSA Logo" class="h-10 w-auto object-contain drop-shadow animate-float"
+                    <img src="image/tsa.jpeg" alt="TSA Logo" class="h-10 w-auto object-contain drop-shadow animate-float"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div style="display:none;" class="h-10 w-24 items-center justify-center">
                         <span class="text-xl font-extrabold text-white">TSA</span>
@@ -418,7 +418,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const session = window.SWAAuth && window.SWAAuth.getSession();
             if (session) {
-                window.location.href = redirectTarget || (session.userType === 'hr' ? 'enhanced-dashboard.html' : 'employee-portal.html');
+                window.location.href = redirectTarget || (session.userType === 'hr' ? 'dashboard.html' : 'employee-portal.html');
             }
         });
 
@@ -680,7 +680,7 @@
             document.getElementById('welcomeRole').textContent   = session.role + ' — ' + session.department;
             document.getElementById('biometricScore').textContent = session.biometricScore;
 
-            const target = redirectTarget || (session.userType === 'hr' ? 'enhanced-dashboard.html' : 'employee-portal.html');
+            const target = redirectTarget || (session.userType === 'hr' ? 'dashboard.html' : 'employee-portal.html');
             document.getElementById('redirectMsg').innerHTML = `
                 <div class="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                 <span>Redirection vers ${session.userType === 'hr' ? 'le Tableau de Bord RH' : 'votre Espace Employé'}…</span>
