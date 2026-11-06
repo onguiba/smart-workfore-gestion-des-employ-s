@@ -1,12 +1,17 @@
-// Database Manager Universal - Support MySQL et PostgreSQL
-require('dotenv').config();
+﻿// Database Manager 100% JSON Persistant - Autonome (Aucun MySQL requis)
 const fs = require('fs');
 const path = require('path');
 
-const DB_DRIVER = process.env.DB_DRIVER || 'json';
-const dataPath = path.join(__dirname, 'data', 'database.json');
+// Emplacement du fichier de base de données JSON
+const dataDir = path.join(__dirname, 'data');
+const dataPath = path.join(dataDir, 'database.json');
 
-// Mock data par défaut
+// Vérifier et créer le dossier data si nécessaire
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+
+// Données initiales si database.json n'existe pas encore
 const defaultData = {
   user: null,
   employees: [
@@ -43,6 +48,74 @@ const defaultData = {
       checkInTime: "08:55",
       checkOutTime: "-",
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      id: 3,
+      name: "Marie Martin",
+      email: "marie.martin@smartworkforce.ai",
+      phone: "+33 6 98 76 54 32",
+      position: "Responsable RH",
+      role: "Responsable Recrutement & Talents",
+      department: "HR",
+      salary: 48000,
+      status: "late",
+      matricule: "SWA-3301",
+      userType: "employee",
+      joinDate: "2021-11-10",
+      checkInTime: "09:42",
+      checkOutTime: "-",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      id: 4,
+      name: "Daniel Gomis",
+      email: "daniel.gomis@smartworkforce.ai",
+      phone: "+33 6 55 44 33 22",
+      position: "Chauffeur Poids Lourd",
+      role: "Chauffeur Poids Lourd",
+      department: "Logistics",
+      salary: 42000,
+      status: "present",
+      matricule: "SWA-7219",
+      userType: "employee",
+      joinDate: "2023-03-01",
+      checkInTime: "07:50",
+      checkOutTime: "-",
+      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      id: 5,
+      name: "Lucas Mercier",
+      email: "lucas.mercier@smartworkforce.ai",
+      phone: "+33 6 77 88 99 00",
+      position: "Account Executive B2B",
+      role: "Account Executive B2B",
+      department: "Sales",
+      salary: 50000,
+      status: "present",
+      matricule: "SWA-5541",
+      userType: "employee",
+      joinDate: "2023-06-15",
+      checkInTime: "08:40",
+      checkOutTime: "-",
+      avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      id: 6,
+      name: "Sarah Perez",
+      email: "sarah.perez@smartworkforce.ai",
+      phone: "+33 6 33 22 11 00",
+      position: "Chef de Produit IA",
+      role: "Chef de Produit IA",
+      department: "Marketing",
+      salary: 47000,
+      status: "absent",
+      matricule: "SWA-6022",
+      userType: "employee",
+      joinDate: "2022-09-01",
+      checkInTime: "-",
+      checkOutTime: "-",
+      avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80"
     }
   ],
   hrUsers: [
@@ -50,202 +123,153 @@ const defaultData = {
       id: 1,
       name: "Sophie Laurent",
       email: "sophie.laurent@smartworkforce.ai",
-      phone: "+33 6 10 20 30 40",
       role: "Directrice des Ressources Humaines",
       department: "Direction RH",
-      matricule: "SWA-DIR-01",
+      phone: "+33 6 10 20 30 40",
+      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
       userType: "hr",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80"
+      matricule: "SWA-DIR-01"
+    },
+    {
+      id: 2,
+      name: "Marie Martin",
+      email: "marie.martin@smartworkforce.ai",
+      role: "Responsable Recrutement & Talents",
+      department: "Ressources Humaines",
+      phone: "+33 6 98 76 54 32",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+      userType: "hr",
+      matricule: "SWA-HR-02"
     }
   ],
   attendance: {
-    present: 2,
-    absent: 0,
-    late: 0,
-    onMission: 0
+    present: 150,
+    absent: 8,
+    onMission: 24,
+    late: 12,
+    rate: 94.7
   },
+  attendanceRecords: [],
   missions: [
     {
       id: 1,
-      title: "Livraison Express Client ABC",
+      title: "Livraison Convoi Sécurisé Dakar-Saint-Louis",
+      description: "Transport de matériel critique pour filiale portuaire",
+      agent: "Daniel Gomis",
+      destination: "Saint-Louis, Sénégal",
       status: "inProgress",
-      progress: 65,
-      dueTime: "17:30",
-      location: "Paris 15ème",
-      assignee: "Moussa Diop",
-      priority: "Haute"
+      priority: "high",
+      progress: 68,
+      eta: "18:45"
+    },
+    {
+      id: 2,
+      title: "Audit Sécurité & Biométrie Hub Abidjan",
+      description: "Mise à niveau des terminaux de pointage facial",
+      agent: "Jean Dupont",
+      destination: "Abidjan, Côte d'Ivoire",
+      status: "inProgress",
+      priority: "medium",
+      progress: 42,
+      eta: "Demain 10:00"
     }
   ],
-  leaves: [],
+  leaves: [
+    {
+      id: 1,
+      employeeId: 2,
+      employeeName: "Jean Dupont",
+      type: "Congés annuels",
+      startDate: "2026-06-15",
+      endDate: "2026-06-25",
+      days: 10,
+      reason: "Congés estivaux",
+      status: "approved"
+    }
+  ],
   leaveBalance: {
-    annual: { total: 25, taken: 10, remaining: 15 },
-    rtt: { total: 11, taken: 3, remaining: 8 },
-    sick: { taken: 2 }
-  },
-  performance: {
-    overall: 92,
-    punctuality: 95,
-    productivity: 88
+    annual: { total: 25, taken: 5, remaining: 20 },
+    rtt: { total: 10, taken: 2, remaining: 8 }
   },
   payroll: [
     {
       id: 1,
-      employee: "Moussa Diop",
-      matricule: "SWA-8842",
-      role: "Superviseur Logistique",
-      department: "Operations",
-      grossSalary: "3 750.00 €",
-      bonuses: "250.00 €",
-      overtime: "180.00 €",
-      deductions: "450.00 €",
-      netSalary: "3 730.00 €",
       month: "Mai 2026",
-      status: "Payé"
+      grossSalary: 3500,
+      netSalary: 2750,
+      bonuses: 250,
+      overtimeHours: 180
     }
   ],
-  fraudAlerts: [],
-  trackingAgents: [],
-  attendanceRecords: [],
-  chatMessages: []
+  fraudAlerts: [
+    {
+      id: 1,
+      employee: "Daniel Gomis",
+      type: "Pointage hors périmètre",
+      time: "08:14",
+      location: "Paris 12ème (Zone non autorisée)",
+      severity: "warning",
+      resolved: false
+    }
+  ],
+  chatMessages: [
+    {
+      role: "assistant",
+      text: "Bonjour ! Je suis l'Assistant RH IA SmartWorkforce. Comment puis-je vous aider aujourd'hui ?"
+    }
+  ]
 };
 
-// Fonction pour charger/sauvegarder les données JSON
+// Charger les données depuis database.json ou initialiser avec defaultData
 function loadData() {
   try {
     if (fs.existsSync(dataPath)) {
-      const rawData = fs.readFileSync(dataPath, 'utf8');
-      return JSON.parse(rawData);
+      const content = fs.readFileSync(dataPath, 'utf8');
+      return JSON.parse(content);
     }
   } catch (err) {
-    console.error('Erreur lors du chargement des données:', err);
+    console.warn('⚠️ Erreur lecture database.json, initialisation :', err.message);
   }
+  saveData(defaultData);
   return defaultData;
 }
 
-function saveData(data) {
+// Sauvegarde synchrone atomique et persistante
+function saveData(dataToSave) {
   try {
-    const dir = path.dirname(dataPath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
+    const jsonString = JSON.stringify(dataToSave, null, 2);
+    fs.writeFileSync(dataPath, jsonString, 'utf8');
+    return true;
   } catch (err) {
-    console.error('Erreur lors de la sauvegarde des données:', err);
+    console.error('❌ Erreur écriture database.json :', err.message);
+    return false;
   }
 }
 
-// Database connection selon le driver
-let db = null;
+const currentData = loadData();
 
-async function initDatabase() {
-  if (DB_DRIVER === 'mysql') {
-    // Configuration MySQL (pour Hostinger)
-    try {
-      const mysql = require('mysql2/promise');
-      db = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT || 3306,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
-      });
-      console.log('✅ Connecté à MySQL (Hostinger)');
-      return db;
-    } catch (error) {
-      console.error('❌ Erreur de connexion MySQL:', error.message);
-      console.log('⚠️  Utilisation du mode JSON de secours');
-      return null;
-    }
-  } else if (DB_DRIVER === 'postgresql' || DB_DRIVER === 'postgres') {
-    // Configuration PostgreSQL
-    try {
-      const { Pool } = require('pg');
-      db = new Pool({
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT || 5432,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
-      });
-      await db.query('SELECT 1');
-      console.log('✅ Connecté à PostgreSQL');
-      return db;
-    } catch (error) {
-      console.error('❌ Erreur de connexion PostgreSQL:', error.message);
-      console.log('⚠️  Utilisation du mode JSON de secours');
-      return null;
-    }
-  } else {
-    console.log('📝 Mode JSON (sans base de données)');
-    return null;
-  }
-}
-
-// Fonction pour ajouter un employé
-async function addEmployee(employee) {
-  if (db && DB_DRIVER === 'mysql') {
-    try {
-      const [result] = await db.execute(
-        `INSERT INTO employees (name, email, phone, position, role, department, salary, photo, matricule, user_type, join_date, registration_time, registration_location) 
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          employee.name,
-          employee.email,
-          employee.phone,
-          employee.position,
-          employee.role || employee.position,
-          employee.department,
-          employee.salary,
-          employee.photo,
-          employee.matricule,
-          employee.userType || 'employee',
-          employee.joinDate,
-          employee.registrationTime,
-          JSON.stringify(employee.location)
-        ]
-      );
-      employee.id = result.insertId;
-    } catch (error) {
-      console.error('Erreur MySQL addEmployee:', error);
-    }
-  } else if (db && (DB_DRIVER === 'postgresql' || DB_DRIVER === 'postgres')) {
-    try {
-      const result = await db.query(
-        `INSERT INTO employees (name, email, phone, position, role, department, salary, photo, matricule, user_type, join_date, registration_time, registration_location) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id`,
-        [
-          employee.name,
-          employee.email,
-          employee.phone,
-          employee.position,
-          employee.role || employee.position,
-          employee.department,
-          employee.salary,
-          employee.photo,
-          employee.matricule,
-          employee.userType || 'employee',
-          employee.joinDate,
-          employee.registrationTime,
-          JSON.stringify(employee.location)
-        ]
-      );
-      employee.id = result.rows[0].id;
-    } catch (error) {
-      console.error('Erreur PostgreSQL addEmployee:', error);
-    }
-  } else {
-    // Mode JSON
-    const data = loadData();
-    data.employees.push(employee);
-    saveData(data);
-  }
-}
-
-// Export
 module.exports = {
-  data: loadData(),
-  initDatabase,
-  addEmployee,
-  saveData,
-  loadData
+  driver: 'json',
+  init: async () => true,
+  data: currentData,
+  dataPath: dataPath,
+  
+  // M�thodes d'ajout pour pointages et persistence
+  addAttendanceRecord: async (record) => {
+    currentData.attendanceRecords = currentData.attendanceRecords || [];
+    currentData.attendanceRecords.unshift(record);
+    saveData(currentData);
+    return record;
+  },
+  saveData: () => saveData(currentData),
+  saveDataDirect: (newData) => {
+    Object.assign(currentData, newData);
+    return saveData(currentData);
+  },
+  initDatabase: async () => {
+    console.log('📦 Base de Données : Mode 100% JSON Autonome Actif');
+    console.log(`📁 Fichier : ${dataPath}`);
+    console.log('⚡ Aucun serveur MySQL externe requis !');
+    return currentData;
+  }
 };

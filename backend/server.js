@@ -173,7 +173,7 @@ function handleAPI(pathname, req, res) {
         const existingEmp = mockData.employees.find(e => e.email.toLowerCase() === email.toLowerCase());
         if (existingEmp) {
           existingEmp.status = 'present';
-          existingEmp.checkinTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+          existingEmp.checkInTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
         }
 
         res.writeHead(200);
@@ -370,7 +370,7 @@ function handleAPI(pathname, req, res) {
           phone: data.phone || '+33 6 00 00 00 00',
           joinDate: new Date().toISOString().split('T')[0],
           salary: parseInt(data.salary) || 40000,
-          checkinTime: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+          checkInTime: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
         };
         mockData.employees.unshift(newEmployee);
         mockData.attendance.present++;

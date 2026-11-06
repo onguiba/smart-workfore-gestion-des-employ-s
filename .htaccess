@@ -1,30 +1,25 @@
-# ==============================================================================
-# TSA SmartWorkforce AI™ — Configuration Apache / Hostinger
-# Direct Root / public_html Layout
+ï»¿# ==============================================================================
+# TSA SmartWorkforce AI - Hostinger Node.js
+# 100% Node.js & Base JSON - Zero PHP
 # ==============================================================================
 
 RewriteEngine On
 
-# 1. En-têtes CORS pour requêtes cross-origin
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
     Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
 </IfModule>
 
-# 2. Routage des appels API vers le moteur PHP
-RewriteRule ^api/(.*)$ backend/api/index.php?route=$1 [L,QSA]
-RewriteRule ^api$ backend/api/index.php?route= [L,QSA]
+# Routage des requetes API vers Node.js
+<IfModule mod_proxy.c>
+    RewriteCond %{REQUEST_URI} ^/api/ [NC]
+    RewriteRule ^api/(.*)$ http://127.0.0.1:3000/api/$1 [P,L]
+</IfModule>
 
-# Compatibilité anciennes routes
-RewriteRule ^src/backend/employees-api\.php$ backend/api/index.php [L,QSA]
-RewriteRule ^api/employees\.php$ backend/api/index.php?route=employees [L,QSA]
+DirectoryIndex index.html home.html
 
-# 3. Page d'accueil par défaut
-DirectoryIndex index.php index.html home.html
-
-# 4. Protection des fichiers sensibles
-<FilesMatch "\.(env|json|sql|log|sh|bat)$">
+<FilesMatch "\.(env|json|log|sh|bat)$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -34,16 +29,6 @@ DirectoryIndex index.php index.html home.html
     </IfModule>
 </FilesMatch>
 
-# 5. Compression et performances
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
-</IfModule>
-
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-    ExpiresByType image/svg+xml "access plus 1 month"
-    ExpiresByType image/jpeg "access plus 1 month"
-    ExpiresByType image/png "access plus 1 month"
 </IfModule>

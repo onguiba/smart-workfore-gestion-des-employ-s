@@ -1,25 +1,14 @@
 {
-  "name": "smart-workforce-ai",
+  "name": "smart-workforce-ai-backend",
   "version": "1.0.0",
-  "description": "Smart Workforce AI - Système de Gestion Intelligente des Employés",
+  "description": "Smart Workforce AI Backend - 100% Node.js natif et base JSON",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "test:db": "node test_connection.js"
+    "start": "node server.js"
   },
-  "keywords": [
-    "workforce",
-    "ai",
-    "hr",
-    "attendance",
-    "payroll"
-  ],
-  "author": "Smart Workforce AI",
-  "license": "MIT",
-  "dependencies": {
-    "dotenv": "^16.0.3",
-    "mysql2": "^3.6.5",
-    "pg": "^8.11.3"
-  }
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
 }

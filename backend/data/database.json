@@ -37,10 +37,10 @@
       "status": "present",
       "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
       "photo": null,
-      "checkinTime": "08:24",
       "joinDate": null,
       "userType": "employee",
-      "location": null
+      "location": null,
+      "checkInTime": "08:24"
     },
     {
       "id": 2,
@@ -55,11 +55,10 @@
       "status": "absent",
       "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
       "photo": null,
-      "checkinTime": "07:30",
       "joinDate": null,
       "userType": "employee",
       "location": null,
-      "checkInTime": "07:30",
+      "checkInTime": "07:00",
       "checkOutTime": "18:00"
     },
     {
@@ -75,10 +74,10 @@
       "status": "late",
       "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
       "photo": null,
-      "checkinTime": "09:42",
       "joinDate": null,
       "userType": "employee",
-      "location": null
+      "location": null,
+      "checkInTime": "09:42"
     },
     {
       "id": 4,
@@ -93,10 +92,10 @@
       "status": "present",
       "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
       "photo": null,
-      "checkinTime": "07:50",
       "joinDate": null,
       "userType": "employee",
-      "location": null
+      "location": null,
+      "checkInTime": "07:50"
     },
     {
       "id": 5,
@@ -111,10 +110,10 @@
       "status": "present",
       "avatar": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
       "photo": null,
-      "checkinTime": "08:40",
       "joinDate": null,
       "userType": "employee",
-      "location": null
+      "location": null,
+      "checkInTime": "08:40"
     },
     {
       "id": 6,
@@ -129,10 +128,10 @@
       "status": "absent",
       "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
       "photo": null,
-      "checkinTime": "-",
       "joinDate": null,
       "userType": "employee",
-      "location": null
+      "location": null,
+      "checkInTime": "-"
     },
     {
       "id": 7,
@@ -147,7 +146,6 @@
       "status": "present",
       "avatar": null,
       "photo": null,
-      "checkinTime": "16:26",
       "joinDate": "03/11/2026",
       "userType": "employee",
       "location": {
@@ -213,7 +211,6 @@
         "accuracy": 10
       },
       "createdAt": "2026-11-06T01:07:51.988Z",
-      "checkinTime": "08:31",
       "checkOutTime": "17:45",
       "checkOutLocation": {
         "latitude": 14.7167,
@@ -251,7 +248,6 @@
         "timestamp": "2026-11-06T01:12:11.331Z"
       },
       "createdAt": "2026-11-06T01:12:28.494Z",
-      "checkinTime": "02:12",
       "checkOutTime": "02:16",
       "checkOutLocation": {
         "latitude": 4.04,
@@ -290,7 +286,6 @@
         "timestamp": "2026-11-06T01:28:46.514Z"
       },
       "createdAt": "2026-11-06T01:29:13.969Z",
-      "checkinTime": "02:29",
       "checkOutTime": "02:30",
       "checkOutLocation": {
         "latitude": 4.04,
@@ -301,6 +296,75 @@
     }
   ],
   "attendanceRecords": [
+    {
+      "id": 16,
+      "employeeId": 2,
+      "employeeEmail": "jean.dupont@smartworkforce.ai",
+      "employeeName": "Jean Dupont",
+      "type": "checkout",
+      "checkOutTime": "2026-11-06T05:51:02.238Z",
+      "checkOutTimeFormatted": "18:00",
+      "checkOutDate": "06/11/2026",
+      "duration": "11h 00min",
+      "timestamp": "2026-11-06T05:51:02.238Z"
+    },
+    {
+      "id": 15,
+      "employeeId": 2,
+      "employeeEmail": "jean.dupont@smartworkforce.ai",
+      "employeeName": "Jean Dupont",
+      "type": "checkin",
+      "checkInTime": "2026-11-06T05:51:02.133Z",
+      "checkInTimeFormatted": "07:00",
+      "checkInDate": "06/11/2026",
+      "timestamp": "2026-11-06T05:51:02.163Z"
+    },
+    {
+      "id": 14,
+      "employeeId": 2,
+      "employeeEmail": "jean.dupont@smartworkforce.ai",
+      "employeeName": "Jean Dupont",
+      "type": "checkout",
+      "checkOutTime": "2026-11-06T05:50:03.326Z",
+      "checkOutTimeFormatted": "18:00",
+      "checkOutDate": "06/11/2026",
+      "duration": "11h 00min",
+      "timestamp": "2026-11-06T05:50:03.326Z"
+    },
+    {
+      "id": 13,
+      "employeeId": 2,
+      "employeeEmail": "jean.dupont@smartworkforce.ai",
+      "employeeName": "Jean Dupont",
+      "type": "checkin",
+      "checkInTime": "2026-11-06T05:50:03.209Z",
+      "checkInTimeFormatted": "07:00",
+      "checkInDate": "06/11/2026",
+      "timestamp": "2026-11-06T05:50:03.232Z"
+    },
+    {
+      "id": 12,
+      "employeeId": 2,
+      "employeeEmail": "jean.dupont@smartworkforce.ai",
+      "employeeName": "Jean Dupont",
+      "type": "checkout",
+      "checkOutTime": "2026-11-06T05:49:30.907Z",
+      "checkOutTimeFormatted": "18:00",
+      "checkOutDate": "06/11/2026",
+      "duration": "11h 00min",
+      "timestamp": "2026-11-06T05:49:30.907Z"
+    },
+    {
+      "id": 11,
+      "employeeId": 2,
+      "employeeEmail": "jean.dupont@smartworkforce.ai",
+      "employeeName": "Jean Dupont",
+      "type": "checkin",
+      "checkInTime": "2026-11-06T05:49:30.785Z",
+      "checkInTimeFormatted": "07:00",
+      "checkInDate": "06/11/2026",
+      "timestamp": "2026-11-06T05:49:30.807Z"
+    },
     {
       "id": 1,
       "employeeId": 7,
@@ -457,7 +521,7 @@
     }
   ],
   "attendance": {
-    "present": 151,
+    "present": 154,
     "absent": 8,
     "onMission": 24,
     "late": 12,
