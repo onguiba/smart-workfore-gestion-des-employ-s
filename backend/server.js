@@ -25,7 +25,7 @@ let mockData = db.data;
 // Initialiser la connexion à la base de données au démarrage
 (async function initApp() {
   console.log('🚀 Démarrage de Smart Workforce AI...');
-  const dbConnection = await db.initDatabase();
+  const dbConnection = await db.init();
   if (dbConnection) {
     console.log(`✅ Mode Base de Données: ${process.env.DB_DRIVER || 'json'}`);
   } else {

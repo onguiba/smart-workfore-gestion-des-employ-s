@@ -65,6 +65,10 @@ class DatabaseManager {
     this.data = loadJsonData();
   }
 
+  async initDatabase() {
+    return this.init();
+  }
+
   async init() {
     const hasPgConfig = process.env.DATABASE_URL || process.env.PGHOST || process.env.POSTGRES_URL;
 
