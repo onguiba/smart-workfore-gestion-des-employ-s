@@ -228,7 +228,6 @@
             }
         }
     </style>
-    <script src="localdb.js"></script>
 </head>
 <body>
     <div class="header">
@@ -377,7 +376,7 @@
         
         if (!currentUser) {
             // Rediriger vers l'accueil si pas connecté
-            window.location.href = '/home.html';
+            window.location.href = 'home.html';
         } else {
             // Afficher les informations
             displayUserInfo(currentUser);
@@ -417,7 +416,7 @@
 
         function logout() {
             localStorage.removeItem('currentUser');
-            window.location.href = '/home.html';
+            window.location.href = 'home.html';
         }
 
         // Gestion de la demande de congé
@@ -562,3 +561,4 @@
     </script>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-﻿const API_BASE = 'http://localhost:3000/api';
+const API_BASE = '/api';
 
 // Leave type selection
 document.querySelectorAll('[class*="rounded-xl p-lg mb-md"]').forEach((option, index) => {

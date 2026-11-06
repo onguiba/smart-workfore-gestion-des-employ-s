@@ -47,7 +47,7 @@ window.SWAAuth = {
     },
     
     // Require authentication (redirect if not logged in)
-    requireAuth: function(redirectUrl = '/home.html') {
+    requireAuth: function(redirectUrl = 'home.html') {
         if (!this.isAuthenticated()) {
             window.location.href = redirectUrl;
             return false;

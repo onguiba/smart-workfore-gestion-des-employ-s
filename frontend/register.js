@@ -65,7 +65,7 @@ document.getElementById('startCamera').addEventListener('click', async () => {
     }
 });
 
-// Capture photo
+// Capture photo - ⭐ VALIDATION AUTOMATIQUE
 document.getElementById('capturePhoto').addEventListener('click', () => {
     const context = canvas.getContext('2d');
     canvas.width = video.videoWidth;
@@ -78,7 +78,7 @@ document.getElementById('capturePhoto').addEventListener('click', () => {
     
     // Display preview
     const preview = document.getElementById('photoPreview');
-    preview.innerHTML = `<img src="${photoData}" class="captured-photo" alt="Photo capturée">`;
+    preview.innerHTML = `<img src="${photoData}" class="captured-photo" alt="Photo capturée" style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">`;
     
     // Stop camera
     if (stream) {
@@ -89,7 +89,8 @@ document.getElementById('capturePhoto').addEventListener('click', () => {
     document.getElementById('capturePhoto').disabled = true;
     document.getElementById('retakePhoto').style.display = 'inline-block';
     
-    showAlert('Photo capturée avec succès! ✓', 'success');
+    // ⭐ VALIDATION AUTOMATIQUE : La photo est validée automatiquement
+    showAlert('✅ Photo capturée et validée! Elle sera enregistrée dans la base de données.', 'success');
     
     checkFormReady();
 });
@@ -176,36 +177,41 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         const result = await response.json();
         
         if (result.success) {
-            showAlert('✅ Inscription réussie! Redirection...', 'success');
+            showAlert('✅ Inscription réussie! Photo enregistrée dans la base de données. Redirection...', 'success');
             
             // Sauvegarder l'utilisateur dans localStorage
             localStorage.setItem('currentUser', JSON.stringify(result.data));
             
-            // Record first check-in
-            await fetch('/api/attendance/checkin', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    employeeId: result.data.id,
-                    employeeEmail: result.data.email,
-                    location: locationData,
-                    checkInTime: new Date().toISOString(),
-                    checkInTimeFormatted: new Date().toLocaleTimeString('fr-FR', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                    }),
-                    checkInDate: new Date().toLocaleDateString('fr-FR'),
-                    photo: photoData
-                })
-            });
+            // ⭐ Enregistrer le premier pointage automatiquement
+            try {
+                await fetch('/api/employees/checkin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        employeeId: result.data.id,
+                        employeeEmail: result.data.email,
+                        employeeName: result.data.name,
+                        location: locationData,
+                        checkInTime: new Date().toISOString(),
+                        checkInTimeFormatted: new Date().toLocaleTimeString('fr-FR', { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                        }),
+                        checkInDate: new Date().toLocaleDateString('fr-FR'),
+                        photo: photoData
+                    })
+                });
+            } catch (checkinError) {
+                console.error('Erreur pointage automatique:', checkinError);
+            }
             
             setTimeout(() => {
                 window.location.href = 'mon-compte.html';
             }, 1500);
         } else {
-            throw new Error(result.error || 'Erreur lors de l\'inscription');
+            throw new Error(result.message || result.error || 'Erreur lors de l\'inscription');
         }
     } catch (error) {
         showAlert('❌ Erreur: ' + error.message, 'error');

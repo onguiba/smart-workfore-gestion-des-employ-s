@@ -11,7 +11,9 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
+const DATA_DIR = fs.existsSync(path.join(__dirname, 'data')) 
+  ? path.join(__dirname, 'data') 
+  : path.join(__dirname, '..', 'data');
 const JSON_DB_FILE = path.join(DATA_DIR, 'database.json');
 
 // Données initiales de démarrage

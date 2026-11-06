@@ -1,35 +1,20 @@
-# Dependencies
+# Dépendances Node.js
 node_modules/
+backend/node_modules/
 package-lock.json
-yarn.lock
 
-# Environment
+# Fichiers d'environnement & secrets
 .env
-.env.local
-.env.production
+.env.*
 backend/.env
-!/.env.docker
-!/.env.example
+backend/.env.*
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
+# Fichiers système & IDE
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
 
-# Logs
-*.log
-logs/
-
-# Build
-dist/
-build/
-
-# Temporary
-*.tmp
-tmp/
-temp/
+# Archives de build temporaires
+*.zip
+hostinger-deploy.zip
