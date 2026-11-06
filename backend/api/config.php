@@ -22,9 +22,9 @@ if (file_exists($envFile)) {
 
 // Paramètres de connexion MySQL Hostinger par défaut
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('DB_NAME') ?: 'u954610625_db_OhzWYKBo');
-define('DB_USER', getenv('DB_USER') ?: 'u954610625_usr_OhzWYKBo');
-define('DB_PASS', getenv('DB_PASSWORD') ?: (getenv('DB_PASS') ?: 'S@SuF-db'));
+define('DB_NAME', getenv('DB_NAME') ?: 'u954610625_db_6LxveS47');
+define('DB_USER', getenv('DB_USER') ?: 'u954610625_usr_6LxveS47');
+define('DB_PASS', getenv('DB_PASSWORD') ?: (getenv('DB_PASS') ?: 'DOesWJm^2O:'));
 define('DB_PORT', getenv('DB_PORT') ?: 3306);
 
 // Fichier de données JSON de secours
@@ -49,7 +49,7 @@ function getDBConnection() {
     static $pdo = null;
     if ($pdo !== null) return $pdo;
 
-    $passwordsToTry = [DB_PASS, 'S@3uF-db', 'S@SuF-db', ''];
+    $passwordsToTry = [DB_PASS, 'DOesWJm^2O:', 'S@3uF-db', 'S@SuF-db', ''];
     $uniquePasswords = array_unique($passwordsToTry);
 
     foreach ($uniquePasswords as $pass) {
