@@ -91,7 +91,7 @@ const server = http.createServer((req, res) => {
 });
 
 // Handle API Routes
-function handleAPI(pathname, req, res) {
+async function handleAPI(pathname, req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -200,10 +200,13 @@ function handleAPI(pathname, req, res) {
     res.writeHead(200);
     res.end(JSON.stringify({ success: true, data: mockData.user }));
   } 
-  else if (pathname === '/api/employees') {
-    // Enrichir chaque employÃ© avec les heures de pointage du jour depuis attendanceRecords
-    const enrichedEmployees = mockData.employees.map(emp => {
-      const recordsToday = (mockData.attendanceRecords || []).filter(r =>
+    else if (pathname === '/api/employees') {
+    // S'assurer que les données proviennent de la base active (PostgreSQL / JSON)
+    const currentEmployees = await db.getEmployees();
+    const currentRecords = await db.getAttendanceRecords();
+
+    const enrichedEmployees = currentEmployees.map(emp => {
+      const recordsToday = (currentRecords || []).filter(r =>
         (r.employeeEmail && emp.email && r.employeeEmail.toLowerCase() === emp.email.toLowerCase()) ||
         (r.employeeId && r.employeeId === emp.id)
       );
@@ -211,7 +214,7 @@ function handleAPI(pathname, req, res) {
       const checkOutRecord = recordsToday.find(r => r.type === 'checkout');
       const checkInTime = checkInRecord ? checkInRecord.checkInTimeFormatted : (emp.checkInTime !== '-' ? emp.checkInTime : null);
       const checkOutTime = checkOutRecord ? checkOutRecord.checkOutTimeFormatted : (emp.checkOutTime !== '-' ? emp.checkOutTime : null);
-      
+
       let duration = null;
       if (checkInTime && checkOutTime) {
         const [h1, m1] = checkInTime.split(':').map(Number);
@@ -219,13 +222,14 @@ function handleAPI(pathname, req, res) {
         if (!isNaN(h1) && !isNaN(h2)) {
           let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
           if (diff < 0) diff += 24 * 60;
-          duration = `${Math.floor(diff / 60)}h ${(diff % 60).toString().padStart(2, '0')}min`;
+          duration = Math.floor(diff / 60) + 'h ' + (diff % 60).toString().padStart(2, '0') + 'min';
         }
       }
       return { ...emp, checkInTime: checkInTime || emp.checkInTime, checkOutTime: checkOutTime || emp.checkOutTime, duration };
     });
     res.writeHead(200);
     res.end(JSON.stringify({ success: true, data: enrichedEmployees }));
+    return;
   }
   else if (pathname === '/api/employees/count') {
     res.writeHead(200);

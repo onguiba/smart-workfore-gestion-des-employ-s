@@ -1,11 +1,8 @@
 /**
- * TSA SmartWorkforce AI™ — Gestionnaire de Base de Données PostgreSQL & Fallback JSON
+ * TSA SmartWorkforce AI™ — Module de Base de Données Universel
+ * Source unique de vérité : PostgreSQL (Neon / Supabase / AWS / Render) ou Base JSON autonome
  * 
- * Fonctionnement :
- * 1. Si PostgreSQL est configuré via DATABASE_URL ou PGHOST, le module se connecte à PostgreSQL (pg Pool).
- * 2. Si les tables n'existent pas encore, il les initialise automatiquement.
- * 3. Si PostgreSQL n'est pas configuré ou indisponible, il bascule de manière transparente
- *    sur le fichier JSON local persistant (backend/data/database.json).
+ * Toutes les données servies par l'API proviennent directement de la base active !
  */
 
 const fs = require('fs');
@@ -16,9 +13,7 @@ try {
   const dotenv = require('dotenv');
   dotenv.config({ path: path.join(__dirname, '..', '.env') });
   dotenv.config({ path: path.join(__dirname, '.env') });
-} catch (e) {
-  // dotenv optionnel
-}
+} catch (e) { }
 
 const dataDir = path.join(__dirname, 'data');
 const dataPath = path.join(dataDir, 'database.json');
@@ -76,38 +71,37 @@ class DatabaseManager {
       try {
         const { Pool } = require('pg');
         const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
-        
-        const poolConfig = connectionString 
+
+        const poolConfig = connectionString
           ? {
-              connectionString,
-              ssl: process.env.PGSSL === 'false' ? false : { rejectUnauthorized: false }
-            }
+            connectionString,
+            ssl: process.env.PGSSL === 'false' ? false : { rejectUnauthorized: false }
+          }
           : {
-              host: process.env.PGHOST || 'localhost',
-              port: parseInt(process.env.PGPORT || '5432'),
-              database: process.env.PGDATABASE,
-              user: process.env.PGUSER,
-              password: process.env.PGPASSWORD,
-              ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false
-            };
+            host: process.env.PGHOST || 'localhost',
+            port: parseInt(process.env.PGPORT || '5432'),
+            database: process.env.PGDATABASE,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false
+          };
 
         this.pgPool = new Pool(poolConfig);
-        
-        // Tester la connexion
+
         const client = await this.pgPool.connect();
         console.log('🐘 Connecté avec succès à la base de données PostgreSQL !');
         client.release();
 
         this.driver = 'postgres';
         await this.initPgTables();
-        await this.syncPgData();
+        await this.syncAllFromPg();
         return true;
       } catch (err) {
-        console.warn('⚠️ Connexion PostgreSQL impossible (' + err.message + '). Basculement automatique sur la base JSON locale.');
+        console.warn('⚠️ Connexion PostgreSQL impossible (' + err.message + '). Utilisation de la base JSON.');
         this.driver = 'json';
       }
     } else {
-      console.log('ℹ️ Aucune variable PostgreSQL détectée. Mode Base de Données JSON actif.');
+      console.log('📦 Source de données active : Base JSON (backend/data/database.json)');
       this.driver = 'json';
     }
 
@@ -181,18 +175,34 @@ class DatabaseManager {
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
       `);
-      console.log('✅ Tables PostgreSQL vérifiées et prêtes.');
+
+      // Si la table employees est vide, injecter les employés depuis JSON
+      const checkEmp = await this.pgPool.query('SELECT COUNT(*) as count FROM employees');
+      if (parseInt(checkEmp.rows[0].count) === 0 && this.data.employees && this.data.employees.length > 0) {
+        console.log('🔄 Migration initiale des données vers PostgreSQL...');
+        for (const e of this.data.employees) {
+          await this.pgPool.query(
+            `INSERT INTO employees (name, email, phone, position, role, department, salary, matricule, user_type, status, photo, avatar, join_date, checkin_time, checkout_time)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+             ON CONFLICT (email) DO NOTHING`,
+            [e.name, e.email, e.phone || '', e.position || e.role, e.role || e.position, e.department || 'Général', e.salary || 40000, e.matricule || `SWA-${e.id}`, e.userType || 'employee', e.status || 'present', e.photo || null, e.avatar || null, e.joinDate || null, e.checkInTime || '-', e.checkOutTime || '-']
+          );
+        }
+      }
+      console.log('✅ Synchronisation de la base PostgreSQL terminée.');
     } catch (e) {
       console.error('Erreur initialisation tables PostgreSQL:', e.message);
     }
   }
 
-  async syncPgData() {
+  // Synchronise toutes les données depuis PostgreSQL pour garantir que tout provient de la base
+  async syncAllFromPg() {
     if (!this.pgPool) return;
     try {
-      const res = await this.pgPool.query('SELECT * FROM employees ORDER BY id ASC');
-      if (res.rows && res.rows.length > 0) {
-        this.data.employees = res.rows.map(r => ({
+      // 1. Employés
+      const resEmp = await this.pgPool.query('SELECT * FROM employees ORDER BY id ASC');
+      if (resEmp.rows) {
+        this.data.employees = resEmp.rows.map(r => ({
           id: r.id,
           name: r.name,
           email: r.email,
@@ -212,11 +222,105 @@ class DatabaseManager {
           location: r.location
         }));
       }
+
+      // 2. Pointages
+      const resAtt = await this.pgPool.query('SELECT * FROM attendance ORDER BY id DESC LIMIT 50');
+      if (resAtt.rows) {
+        this.data.attendanceRecords = resAtt.rows.map(r => ({
+          id: r.id,
+          employeeId: r.employee_id,
+          employeeEmail: r.employee_email,
+          employeeName: r.employee_name,
+          type: r.type,
+          checkInTime: r.check_time,
+          checkOutTime: r.check_time,
+          checkInTimeFormatted: r.check_time_formatted,
+          checkOutTimeFormatted: r.check_time_formatted,
+          checkInDate: r.check_date,
+          checkOutDate: r.check_date,
+          duration: r.duration,
+          location: r.location,
+          photo: r.photo,
+          createdAt: r.created_at
+        }));
+      }
+
+      // 3. Missions
+      const resMis = await this.pgPool.query('SELECT * FROM missions ORDER BY id ASC');
+      if (resMis.rows && resMis.rows.length > 0) {
+        this.data.missions = resMis.rows;
+      }
+
+      // 4. Congés
+      const resLea = await this.pgPool.query('SELECT * FROM leaves ORDER BY id DESC');
+      if (resLea.rows && resLea.rows.length > 0) {
+        this.data.leaves = resLea.rows.map(l => ({
+          id: l.id,
+          employeeId: l.employee_id,
+          employeeEmail: l.employee_email,
+          employeeName: l.employee_name,
+          type: l.type,
+          startDate: l.start_date,
+          endDate: l.end_date,
+          days: l.days,
+          reason: l.reason,
+          status: l.status
+        }));
+      }
+
+      // Sauvegarde miroir local JSON
+      saveJsonData(this.data);
     } catch (e) {
       console.warn('Erreur synchronisation PostgreSQL:', e.message);
     }
   }
 
+  // Lecture de tous les employés directement depuis la base
+  async getEmployees() {
+    if (this.driver === 'postgres' && this.pgPool) {
+      await this.syncAllFromPg();
+    }
+    return this.data.employees;
+  }
+
+  // Lecture des pointages du jour directement depuis la base
+  async getAttendanceRecords() {
+    if (this.driver === 'postgres' && this.pgPool) {
+      await this.syncAllFromPg();
+    }
+    return this.data.attendanceRecords;
+  }
+
+  // Ajout et enregistrement d'un employé dans la base
+  async addEmployee(emp) {
+    if (this.driver === 'postgres' && this.pgPool) {
+      try {
+        const res = await this.pgPool.query(
+          `INSERT INTO employees (name, email, phone, position, role, department, salary, matricule, user_type, status, photo, avatar, join_date, checkin_time, checkout_time, location)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+           RETURNING id`,
+          [
+            emp.name, emp.email, emp.phone || '', emp.position || emp.role, emp.role || emp.position,
+            emp.department || 'Operations', emp.salary || 40000, emp.matricule || `SWA-${Date.now().toString().slice(-4)}`,
+            emp.userType || 'employee', emp.status || 'present', emp.photo || null, emp.avatar || null,
+            emp.joinDate || new Date().toISOString().split('T')[0], emp.checkInTime || '-', emp.checkOutTime || '-',
+            emp.location ? JSON.stringify(emp.location) : null
+          ]
+        );
+        emp.id = res.rows[0].id;
+      } catch (err) {
+        console.error('Erreur addEmployee PostgreSQL:', err.message);
+      }
+    } else {
+      emp.id = this.data.employees.length + 1;
+    }
+
+    this.data.employees.unshift(emp);
+    saveJsonData(this.data);
+    return emp;
+  }
+
+  // Ajout et enregistrement d'un pointage (Arrivée / Départ) dans la base
   async addAttendanceRecord(record) {
     this.data.attendanceRecords = this.data.attendanceRecords || [];
     this.data.attendanceRecords.unshift(record);
