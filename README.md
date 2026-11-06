@@ -3,6 +3,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Node.js](https://img.shields.io/badge/Node.js-18-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 > Système complet de gestion RH avec reconnaissance faciale, pointage biométrique, gestion des congés, chat IA, tracking GPS et détection de fraude en temps réel.
@@ -30,14 +31,14 @@
 
 ```bash
 # 1. Cloner le projet
-git clone https://github.com/votre-username/smart-workforce-ai.git
-cd smart-workforce-ai
+git clone https://github.com/onguiba/smart-workfore-gestion-des-employ-s.git
+cd smart-workfore-gestion-des-employ-s-main
 
 # 2. Créer le fichier de configuration
 cp .env.example .env
 
 # 3. Modifier .env avec vos mots de passe
-# Changez: DB_PASSWORD, MYSQL_ROOT_PASSWORD, JWT_SECRET
+# Changez: DB_PASSWORD, JWT_SECRET
 
 # 4. Démarrer l'application
 docker-compose up -d
@@ -46,11 +47,79 @@ docker-compose up -d
 # http://localhost
 ```
 
+### 🗄️ Choix de la Base de Données
+
+Le projet supporte **2 bases de données** :
+
+#### Option 1 : PostgreSQL (Docker - Recommandé pour développement)
+
+```bash
+# Utiliser PostgreSQL avec Docker
+docker-compose up -d
+```
+
+#### Option 2 : MySQL (Hostinger - Production)
+
+```bash
+# 1. Configurer les identifiants Hostinger
+cp backend/.env.hostinger backend/.env
+
+# 2. Modifier backend/.env avec vos identifiants MySQL Hostinger
+# DB_DRIVER=mysql
+# DB_HOST=localhost
+# DB_NAME=votre_db
+# DB_USER=votre_user
+# DB_PASSWORD=votre_password
+
+# 3. Importer le schéma SQL dans phpMyAdmin
+# Fichier: backend/hostinger_database.sql
+
+# 4. Tester la connexion
+cd backend
+npm install
+node test_connection.js
+
+# 5. Démarrer l'application
+npm start
+```
+
+#### Option 3 : MySQL avec Docker (Alternative)
+
+```bash
+docker-compose -f docker-compose.mysql.yml up -d
+```
+
+### Basculer entre MySQL et PostgreSQL
+
+Modifiez simplement le fichier `backend/.env` :
+
+**PostgreSQL** :
+```env
+DB_DRIVER=postgresql
+DB_HOST=postgres
+DB_PORT=5432
+```
+
+**MySQL (Hostinger)** :
+```env
+DB_DRIVER=mysql
+DB_HOST=localhost
+DB_PORT=3306
+```
+
+**Mode JSON (Sans DB)** :
+```env
+DB_DRIVER=json
+```
+
 ### Commandes Utiles
 
 ```bash
-# Démarrer
+# Démarrer avec PostgreSQL
 docker-compose up -d
+
+# Démarrer avec MySQL (Docker)
+docker-compose -f docker-compose.mysql.yml up -d
 
 # Arrêter
 docker-compose down
@@ -58,8 +127,14 @@ docker-compose down
 # Voir les logs
 docker-compose logs -f
 
-# Sauvegarder la base de données PostgreSQL
+# Tester connexion MySQL
+cd backend && node test_connection.js
+
+# Sauvegarder PostgreSQL
 docker-compose exec postgres pg_dump -U smartworkforce smart_workforce > backup.sql
+
+# Sauvegarder MySQL
+docker-compose exec mysql mysqldump -u smartworkforce -p smart_workforce > backup_mysql.sql
 ```
 
 ## 📖 Documentation
@@ -67,6 +142,8 @@ docker-compose exec postgres pg_dump -U smartworkforce smart_workforce > backup.
 - **[QUICK_START.md](QUICK_START.md)** - Guide de démarrage rapide
 - **[DOCKER_GUIDE.md](DOCKER_GUIDE.md)** - Documentation Docker complète
 - **[README_DOCKER.md](README_DOCKER.md)** - Infrastructure et architecture
+- **[HOSTINGER_SETUP.md](HOSTINGER_SETUP.md)** - Configuration MySQL Hostinger
+- **[backend/migrate_mysql_to_postgres.md](backend/migrate_mysql_to_postgres.md)** - Guide de migration
 
 ## 🏗️ Architecture
 
@@ -81,16 +158,21 @@ docker-compose exec postgres pg_dump -U smartworkforce smart_workforce > backup.
 └────────┬────────┘
          │
          ▼
-┌─────────────────┐
-│ PostgreSQL (5432)│  → Base de données
-└─────────────────┘
+┌─────────────────────────────────┐
+│ PostgreSQL (5432) ou MySQL (3306)│  → Base de données
+└─────────────────────────────────┘
 ```
+
+**Flexibilité de la Base de Données** :
+- ✅ PostgreSQL 15 (Docker - recommandé pour dev/test)
+- ✅ MySQL 8.0 (Hostinger - production)
+- ✅ Mode JSON (fallback sans base de données)
 
 ## 🛠️ Technologies
 
 - **Frontend**: HTML5, CSS3, JavaScript vanilla
 - **Backend**: Node.js
-- **Base de données**: PostgreSQL 15
+- **Base de données**: PostgreSQL 15 / MySQL 8.0 (flexible)
 - **Serveur web**: Nginx
 - **Containerisation**: Docker & Docker Compose
 - **CI/CD**: GitHub Actions
@@ -106,9 +188,14 @@ smart-workforce-ai/
 │   └── ...
 ├── backend/              # Backend Node.js
 │   ├── server.js        # Serveur principal
-│   ├── database.js      # Gestion DB
-│   └── database.sql     # Schéma MySQL
-├── docker-compose.yml   # Configuration Docker
+│   ├── database.js      # Gestion DB universelle (MySQL/PostgreSQL)
+│   ├── database.sql     # Schéma PostgreSQL
+│   ├── hostinger_database.sql  # Schéma MySQL pour Hostinger
+│   ├── test_connection.js      # Test connexion MySQL
+│   ├── .env.hostinger   # Config Hostinger MySQL
+│   └── package.json     # Dépendances (mysql2 + pg)
+├── docker-compose.yml   # Configuration Docker PostgreSQL
+├── docker-compose.mysql.yml  # Configuration Docker MySQL
 ├── Dockerfile          # Image production
 ├── nginx.conf         # Configuration Nginx
 └── README.md         # Ce fichier
@@ -154,8 +241,10 @@ Ce projet est sous licence MIT.
 ## 🆘 Support
 
 Pour toute question ou problème :
-- 📖 Documentation: [DOCKER_GUIDE.md](DOCKER_GUIDE.md)
+- 📖 Documentation Docker: [DOCKER_GUIDE.md](DOCKER_GUIDE.md)
+- 🌐 Configuration Hostinger: [HOSTINGER_SETUP.md](HOSTINGER_SETUP.md)
 - 📚 Guide rapide: [QUICK_START.md](QUICK_START.md)
+- 🐛 Problèmes: [GitHub Issues](https://github.com/onguiba/smart-workfore-gestion-des-employ-s/issues)
 
 ---
 

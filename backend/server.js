@@ -22,6 +22,17 @@ const MIME_TYPES = {
 const db = require('./database');
 let mockData = db.data;
 
+// Initialiser la connexion à la base de données au démarrage
+(async function initApp() {
+  console.log('🚀 Démarrage de Smart Workforce AI...');
+  const dbConnection = await db.initDatabase();
+  if (dbConnection) {
+    console.log(`✅ Mode Base de Données: ${process.env.DB_DRIVER || 'json'}`);
+  } else {
+    console.log('📝 Mode JSON activé (aucune base de données externe)');
+  }
+})();
+
 const server = http.createServer((req, res) => {
   // Parse URL
   const parsedUrl = url.parse(req.url, true);
