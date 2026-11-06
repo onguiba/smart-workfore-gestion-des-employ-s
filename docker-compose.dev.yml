@@ -1,0 +1,58 @@
+version: '3.8'
+
+# Configuration Docker Compose pour le développement
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: smart-workforce-mysql-dev
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: smart_workforce_dev
+      MYSQL_USER: smartworkforce
+      MYSQL_PASSWORD: smartworkforce2026
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_dev_data:/var/lib/mysql
+      - ./backend/database.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - smart-workforce-dev
+
+  # Application Node.js en mode développement avec hot-reload
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: smart-workforce-app-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      DB_DRIVER: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: smart_workforce_dev
+      DB_USER: smartworkforce
+      DB_PASSWORD: smartworkforce2026
+      JWT_SECRET: swa_dev_token_key
+    depends_on:
+      - mysql
+    networks:
+      - smart-workforce-dev
+    volumes:
+      # Mount source code for hot-reload
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+      - /app/backend/node_modules
+    command: npm run dev
+
+volumes:
+  mysql_dev_data:
+
+networks:
+  smart-workforce-dev:
+    driver: bridge
