@@ -1,244 +1,56 @@
-﻿// Database Manager 100% JSON Persistant - Autonome (Aucun MySQL requis)
+/**
+ * TSA SmartWorkforce AI™ — Gestionnaire de Base de Données PostgreSQL & Fallback JSON
+ * 
+ * Fonctionnement :
+ * 1. Si PostgreSQL est configuré via DATABASE_URL ou PGHOST, le module se connecte à PostgreSQL (pg Pool).
+ * 2. Si les tables n'existent pas encore, il les initialise automatiquement.
+ * 3. Si PostgreSQL n'est pas configuré ou indisponible, il bascule de manière transparente
+ *    sur le fichier JSON local persistant (backend/data/database.json).
+ */
+
 const fs = require('fs');
 const path = require('path');
 
-// Emplacement du fichier de base de données JSON
+// Chargement facultatif des variables .env
+try {
+  const dotenv = require('dotenv');
+  dotenv.config({ path: path.join(__dirname, '..', '.env') });
+  dotenv.config({ path: path.join(__dirname, '.env') });
+} catch (e) {
+  // dotenv optionnel
+}
+
 const dataDir = path.join(__dirname, 'data');
 const dataPath = path.join(dataDir, 'database.json');
 
-// Vérifier et créer le dossier data si nécessaire
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-// Données initiales si database.json n'existe pas encore
-const defaultData = {
-  user: null,
-  employees: [
-    {
-      id: 1,
-      name: "Moussa Diop",
-      email: "moussa.diop@smartworkforce.ai",
-      phone: "+33 6 45 89 12 30",
-      position: "Superviseur Logistique",
-      role: "Superviseur Logistique",
-      department: "Operations",
-      salary: 45000,
-      status: "present",
-      matricule: "SWA-8842",
-      userType: "employee",
-      joinDate: "2023-01-15",
-      checkInTime: "08:24",
-      checkOutTime: "-",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 2,
-      name: "Jean Dupont",
-      email: "jean.dupont@smartworkforce.ai",
-      phone: "+33 6 12 34 56 78",
-      position: "Architecte Cloud",
-      role: "Architecte Cloud & Systèmes",
-      department: "IT",
-      salary: 52000,
-      status: "present",
-      matricule: "SWA-4910",
-      userType: "employee",
-      joinDate: "2022-05-20",
-      checkInTime: "08:55",
-      checkOutTime: "-",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 3,
-      name: "Marie Martin",
-      email: "marie.martin@smartworkforce.ai",
-      phone: "+33 6 98 76 54 32",
-      position: "Responsable RH",
-      role: "Responsable Recrutement & Talents",
-      department: "HR",
-      salary: 48000,
-      status: "late",
-      matricule: "SWA-3301",
-      userType: "employee",
-      joinDate: "2021-11-10",
-      checkInTime: "09:42",
-      checkOutTime: "-",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 4,
-      name: "Daniel Gomis",
-      email: "daniel.gomis@smartworkforce.ai",
-      phone: "+33 6 55 44 33 22",
-      position: "Chauffeur Poids Lourd",
-      role: "Chauffeur Poids Lourd",
-      department: "Logistics",
-      salary: 42000,
-      status: "present",
-      matricule: "SWA-7219",
-      userType: "employee",
-      joinDate: "2023-03-01",
-      checkInTime: "07:50",
-      checkOutTime: "-",
-      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 5,
-      name: "Lucas Mercier",
-      email: "lucas.mercier@smartworkforce.ai",
-      phone: "+33 6 77 88 99 00",
-      position: "Account Executive B2B",
-      role: "Account Executive B2B",
-      department: "Sales",
-      salary: 50000,
-      status: "present",
-      matricule: "SWA-5541",
-      userType: "employee",
-      joinDate: "2023-06-15",
-      checkInTime: "08:40",
-      checkOutTime: "-",
-      avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 6,
-      name: "Sarah Perez",
-      email: "sarah.perez@smartworkforce.ai",
-      phone: "+33 6 33 22 11 00",
-      position: "Chef de Produit IA",
-      role: "Chef de Produit IA",
-      department: "Marketing",
-      salary: 47000,
-      status: "absent",
-      matricule: "SWA-6022",
-      userType: "employee",
-      joinDate: "2022-09-01",
-      checkInTime: "-",
-      checkOutTime: "-",
-      avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80"
-    }
-  ],
-  hrUsers: [
-    {
-      id: 1,
-      name: "Sophie Laurent",
-      email: "sophie.laurent@smartworkforce.ai",
-      role: "Directrice des Ressources Humaines",
-      department: "Direction RH",
-      phone: "+33 6 10 20 30 40",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
-      userType: "hr",
-      matricule: "SWA-DIR-01"
-    },
-    {
-      id: 2,
-      name: "Marie Martin",
-      email: "marie.martin@smartworkforce.ai",
-      role: "Responsable Recrutement & Talents",
-      department: "Ressources Humaines",
-      phone: "+33 6 98 76 54 32",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
-      userType: "hr",
-      matricule: "SWA-HR-02"
-    }
-  ],
-  attendance: {
-    present: 150,
-    absent: 8,
-    onMission: 24,
-    late: 12,
-    rate: 94.7
-  },
-  attendanceRecords: [],
-  missions: [
-    {
-      id: 1,
-      title: "Livraison Convoi Sécurisé Dakar-Saint-Louis",
-      description: "Transport de matériel critique pour filiale portuaire",
-      agent: "Daniel Gomis",
-      destination: "Saint-Louis, Sénégal",
-      status: "inProgress",
-      priority: "high",
-      progress: 68,
-      eta: "18:45"
-    },
-    {
-      id: 2,
-      title: "Audit Sécurité & Biométrie Hub Abidjan",
-      description: "Mise à niveau des terminaux de pointage facial",
-      agent: "Jean Dupont",
-      destination: "Abidjan, Côte d'Ivoire",
-      status: "inProgress",
-      priority: "medium",
-      progress: 42,
-      eta: "Demain 10:00"
-    }
-  ],
-  leaves: [
-    {
-      id: 1,
-      employeeId: 2,
-      employeeName: "Jean Dupont",
-      type: "Congés annuels",
-      startDate: "2026-06-15",
-      endDate: "2026-06-25",
-      days: 10,
-      reason: "Congés estivaux",
-      status: "approved"
-    }
-  ],
-  leaveBalance: {
-    annual: { total: 25, taken: 5, remaining: 20 },
-    rtt: { total: 10, taken: 2, remaining: 8 }
-  },
-  payroll: [
-    {
-      id: 1,
-      month: "Mai 2026",
-      grossSalary: 3500,
-      netSalary: 2750,
-      bonuses: 250,
-      overtimeHours: 180
-    }
-  ],
-  fraudAlerts: [
-    {
-      id: 1,
-      employee: "Daniel Gomis",
-      type: "Pointage hors périmètre",
-      time: "08:14",
-      location: "Paris 12ème (Zone non autorisée)",
-      severity: "warning",
-      resolved: false
-    }
-  ],
-  chatMessages: [
-    {
-      role: "assistant",
-      text: "Bonjour ! Je suis l'Assistant RH IA SmartWorkforce. Comment puis-je vous aider aujourd'hui ?"
-    }
-  ]
-};
-
-// Charger les données depuis database.json ou initialiser avec defaultData
-function loadData() {
+function loadJsonData() {
   try {
     if (fs.existsSync(dataPath)) {
-      const content = fs.readFileSync(dataPath, 'utf8');
-      return JSON.parse(content);
+      return JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     }
   } catch (err) {
-    console.warn('⚠️ Erreur lecture database.json, initialisation :', err.message);
+    console.warn('⚠️ Erreur lecture database.json :', err.message);
   }
-  saveData(defaultData);
-  return defaultData;
+  return {
+    employees: [],
+    hrUsers: [],
+    attendance: { present: 0, absent: 0, onMission: 0, late: 0, rate: 0 },
+    attendanceRecords: [],
+    missions: [],
+    leaves: [],
+    payroll: [],
+    fraudAlerts: [],
+    chatMessages: []
+  };
 }
 
-// Sauvegarde synchrone atomique et persistante
-function saveData(dataToSave) {
+function saveJsonData(data) {
   try {
-    const jsonString = JSON.stringify(dataToSave, null, 2);
-    fs.writeFileSync(dataPath, jsonString, 'utf8');
+    fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), 'utf8');
     return true;
   } catch (err) {
     console.error('❌ Erreur écriture database.json :', err.message);
@@ -246,30 +58,207 @@ function saveData(dataToSave) {
   }
 }
 
-const currentData = loadData();
-
-module.exports = {
-  driver: 'json',
-  init: async () => true,
-  data: currentData,
-  dataPath: dataPath,
-
-  // M�thodes d'ajout pour pointages et persistence
-  addAttendanceRecord: async (record) => {
-    currentData.attendanceRecords = currentData.attendanceRecords || [];
-    currentData.attendanceRecords.unshift(record);
-    saveData(currentData);
-    return record;
-  },
-  saveData: () => saveData(currentData),
-  saveDataDirect: (newData) => {
-    Object.assign(currentData, newData);
-    return saveData(currentData);
-  },
-  initDatabase: async () => {
-    console.log('📦 Base de Données : Mode 100% JSON Autonome Actif');
-    console.log(`📁 Fichier : ${dataPath}`);
-    console.log('⚡ Aucun serveur MySQL externe requis !');
-    return currentData;
+class DatabaseManager {
+  constructor() {
+    this.driver = 'json';
+    this.pgPool = null;
+    this.data = loadJsonData();
   }
-};
+
+  async init() {
+    const hasPgConfig = process.env.DATABASE_URL || process.env.PGHOST || process.env.POSTGRES_URL;
+
+    if (hasPgConfig) {
+      try {
+        const { Pool } = require('pg');
+        const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+        
+        const poolConfig = connectionString 
+          ? {
+              connectionString,
+              ssl: process.env.PGSSL === 'false' ? false : { rejectUnauthorized: false }
+            }
+          : {
+              host: process.env.PGHOST || 'localhost',
+              port: parseInt(process.env.PGPORT || '5432'),
+              database: process.env.PGDATABASE,
+              user: process.env.PGUSER,
+              password: process.env.PGPASSWORD,
+              ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false
+            };
+
+        this.pgPool = new Pool(poolConfig);
+        
+        // Tester la connexion
+        const client = await this.pgPool.connect();
+        console.log('🐘 Connecté avec succès à la base de données PostgreSQL !');
+        client.release();
+
+        this.driver = 'postgres';
+        await this.initPgTables();
+        await this.syncPgData();
+        return true;
+      } catch (err) {
+        console.warn('⚠️ Connexion PostgreSQL impossible (' + err.message + '). Basculement automatique sur la base JSON locale.');
+        this.driver = 'json';
+      }
+    } else {
+      console.log('ℹ️ Aucune variable PostgreSQL détectée. Mode Base de Données JSON actif.');
+      this.driver = 'json';
+    }
+
+    return true;
+  }
+
+  async initPgTables() {
+    if (!this.pgPool) return;
+    try {
+      await this.pgPool.query(`
+        CREATE TABLE IF NOT EXISTS employees (
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(150) NOT NULL,
+          email VARCHAR(150) UNIQUE NOT NULL,
+          phone VARCHAR(50),
+          position VARCHAR(100),
+          role VARCHAR(100),
+          department VARCHAR(100),
+          salary NUMERIC(10, 2) DEFAULT 0.00,
+          matricule VARCHAR(50) UNIQUE,
+          user_type VARCHAR(30) DEFAULT 'employee',
+          status VARCHAR(30) DEFAULT 'present',
+          photo TEXT,
+          avatar TEXT,
+          join_date VARCHAR(50),
+          checkin_time VARCHAR(20) DEFAULT '-',
+          checkout_time VARCHAR(20) DEFAULT '-',
+          location JSONB,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS attendance (
+          id SERIAL PRIMARY KEY,
+          employee_id INT,
+          employee_email VARCHAR(150),
+          employee_name VARCHAR(150),
+          type VARCHAR(30) NOT NULL,
+          check_time VARCHAR(50),
+          check_time_formatted VARCHAR(20),
+          check_date VARCHAR(50),
+          duration VARCHAR(30),
+          location JSONB,
+          photo TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS leaves (
+          id SERIAL PRIMARY KEY,
+          employee_id INT,
+          employee_email VARCHAR(150),
+          employee_name VARCHAR(150),
+          type VARCHAR(100) NOT NULL,
+          start_date VARCHAR(50) NOT NULL,
+          end_date VARCHAR(50) NOT NULL,
+          days INT DEFAULT 1,
+          reason TEXT,
+          status VARCHAR(30) DEFAULT 'pending',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS missions (
+          id SERIAL PRIMARY KEY,
+          title VARCHAR(200) NOT NULL,
+          description TEXT,
+          agent VARCHAR(150),
+          destination VARCHAR(150),
+          status VARCHAR(30) DEFAULT 'inProgress',
+          priority VARCHAR(30) DEFAULT 'medium',
+          progress INT DEFAULT 0,
+          eta VARCHAR(50),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+      console.log('✅ Tables PostgreSQL vérifiées et prêtes.');
+    } catch (e) {
+      console.error('Erreur initialisation tables PostgreSQL:', e.message);
+    }
+  }
+
+  async syncPgData() {
+    if (!this.pgPool) return;
+    try {
+      const res = await this.pgPool.query('SELECT * FROM employees ORDER BY id ASC');
+      if (res.rows && res.rows.length > 0) {
+        this.data.employees = res.rows.map(r => ({
+          id: r.id,
+          name: r.name,
+          email: r.email,
+          phone: r.phone,
+          position: r.position,
+          role: r.role,
+          department: r.department,
+          salary: parseFloat(r.salary) || 0,
+          matricule: r.matricule,
+          userType: r.user_type,
+          status: r.status,
+          photo: r.photo,
+          avatar: r.avatar,
+          joinDate: r.join_date,
+          checkInTime: r.checkin_time,
+          checkOutTime: r.checkout_time,
+          location: r.location
+        }));
+      }
+    } catch (e) {
+      console.warn('Erreur synchronisation PostgreSQL:', e.message);
+    }
+  }
+
+  async addAttendanceRecord(record) {
+    this.data.attendanceRecords = this.data.attendanceRecords || [];
+    this.data.attendanceRecords.unshift(record);
+    saveJsonData(this.data);
+
+    if (this.driver === 'postgres' && this.pgPool) {
+      try {
+        await this.pgPool.query(
+          `INSERT INTO attendance (employee_id, employee_email, employee_name, type, check_time, check_time_formatted, check_date, duration, location, photo)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+          [
+            record.employeeId || null,
+            record.employeeEmail,
+            record.employeeName,
+            record.type,
+            record.checkInTime || record.checkOutTime || '',
+            record.checkInTimeFormatted || record.checkOutTimeFormatted || '',
+            record.checkInDate || record.checkOutDate || '',
+            record.duration || '',
+            record.location ? JSON.stringify(record.location) : null,
+            record.photo || null
+          ]
+        );
+
+        if (record.employeeId) {
+          const colTime = record.type === 'checkin' ? 'checkin_time' : 'checkout_time';
+          const timeVal = record.checkInTimeFormatted || record.checkOutTimeFormatted || '-';
+          const newStatus = record.type === 'checkin' ? 'present' : 'absent';
+          await this.pgPool.query(
+            `UPDATE employees SET status = $1, ${colTime} = $2 WHERE id = $3`,
+            [newStatus, timeVal, record.employeeId]
+          );
+        }
+      } catch (err) {
+        console.error('Erreur écriture attendance PostgreSQL:', err.message);
+      }
+    }
+
+    return record;
+  }
+
+  saveData() {
+    return saveJsonData(this.data);
+  }
+}
+
+const dbInstance = new DatabaseManager();
+
+module.exports = dbInstance;

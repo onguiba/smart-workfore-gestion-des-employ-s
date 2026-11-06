@@ -1,7 +1,7 @@
 ﻿{
   "name": "smart-workforce-ai",
   "version": "1.0.0",
-  "description": "Smart Workforce AI - Architecture Frontend & Backend séparés (100% Node.js & Base JSON)",
+  "description": "Smart Workforce AI - Système RH Node.js & Base PostgreSQL (avec fallback JSON)",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -10,6 +10,8 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "pg": "^8.11.5",
+    "dotenv": "^16.4.5"
+  }
 }
