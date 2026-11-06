@@ -1,7 +1,11 @@
 <?php
 /**
- * TSA SmartWorkforce AIâ„¢ â€” Point d'entrÃ©e principal
- * Redirige vers le portail collaborateur frontend
+ * TSA SmartWorkforce AI™ — Point d'entrée Hostinger
  */
-header('Location: frontend/home.html');
-exit();
+if (file_exists(__DIR__ . '/home.html')) {
+    include __DIR__ . '/home.html';
+    exit();
+} else {
+    header('Location: home.html');
+    exit();
+}

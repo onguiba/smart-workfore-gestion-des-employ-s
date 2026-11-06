@@ -4,9 +4,7 @@ const path = require('path');
 const url = require('url');
 
 const PORT = process.env.PORT || 3000;
-const FRONTEND_DIR = fs.existsSync(path.join(__dirname, '..', 'frontend'))
-  ? path.join(__dirname, '..', 'frontend')
-  : path.join(__dirname, 'frontend');
+const FRONTEND_DIR = fs.existsSync(path.join(__dirname, '..', 'home.html')) ? path.join(__dirname, '..') : (fs.existsSync(path.join(__dirname, '..', 'frontend')) ? path.join(__dirname, '..', 'frontend') : __dirname);
 
 const MIME_TYPES = {
   '.html': 'text/html',

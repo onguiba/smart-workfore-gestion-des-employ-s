@@ -1,36 +1,29 @@
 # ==============================================================================
-# TSA SmartWorkforce AI™ — Configuration Apache / Hostinger
-# Architecture Unifiée : Backend & Frontend synchronisés
+# TSA SmartWorkforce AI� � Configuration Apache / Hostinger
+# Direct Root / public_html Layout
 # ==============================================================================
 
 RewriteEngine On
 
-# 1. CORS Headers Globaux pour toutes les requêtes API
+# 1. En-t�tes CORS pour requ�tes cross-origin
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
     Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
 </IfModule>
 
-# 2. Routage Central des API vers le Backend PHP
+# 2. Routage des appels API vers le moteur PHP
 RewriteRule ^api/(.*)$ backend/api/index.php?route=$1 [L,QSA]
 RewriteRule ^api$ backend/api/index.php?route= [L,QSA]
 
-# Compatibilité anciennes routes directes
+# Compatibilit� anciennes routes
 RewriteRule ^src/backend/employees-api\.php$ backend/api/index.php [L,QSA]
 RewriteRule ^api/employees\.php$ backend/api/index.php?route=employees [L,QSA]
 
-# 3. Page d'accueil par défaut
-DirectoryIndex index.php index.html
+# 3. Page d'accueil par d�faut
+DirectoryIndex index.php index.html home.html
 
-# 4. Servir les fichiers frontend si demandés à la racine
-# Exemple: /home.html -> /frontend/home.html
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{DOCUMENT_ROOT}/frontend/$1 -f
-RewriteRule ^(.*)$ frontend/$1 [L]
-
-# 5. Sécurité : Empêcher le téléchargement direct des fichiers sensibles
+# 4. Protection des fichiers sensibles
 <FilesMatch "\.(env|json|sql|log|sh|bat)$">
     <IfModule mod_authz_core.c>
         Require all denied
@@ -41,23 +34,16 @@ RewriteRule ^(.*)$ frontend/$1 [L]
     </IfModule>
 </FilesMatch>
 
-# 6. Optimisation de la compression (GZIP / Deflate)
+# 5. Compression et performances
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
 </IfModule>
 
-# 7. Cache des ressources statiques pour performances maximales
 <IfModule mod_expires.c>
     ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
     ExpiresByType image/jpeg "access plus 1 month"
     ExpiresByType image/png "access plus 1 month"
-    ExpiresByType image/svg+xml "access plus 1 month"
-    ExpiresByType text/css "access plus 1 week"
-    ExpiresByType application/javascript "access plus 1 week"
 </IfModule>
-
-# 8. Désactiver le listage des répertoires
-Options -Indexes
-
-# 9. Page d'erreur 404 conviviale
-ErrorDocument 404 /frontend/home.html
