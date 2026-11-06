@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SmartWorkforce AI — Gestion & Suivi des Missions Terrain</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#EEF2FF',
+                100: '#E0E7FF',
+                500: '#6366F1',
+                600: '#4F46E5',
+                700: '#4338CA',
+                900: '#1E1B4B'
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="professional-styles.css"/>
+</head>
+<body class="bg-slate-50 text-slate-900 pb-20">
+
+    <!-- Top Executive Header -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="flex items-center gap-2.5 group text-slate-800 hover:text-blue-600 transition">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-extrabold text-base md:text-lg tracking-tight text-slate-900">SmartWorkforce<span class="text-blue-600">AI</span></span>
+                        <span class="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-200/60">Module Missions</span>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block">Planification & Dispatching Opérationnel</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button onclick="openNewMissionModal()" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/25 flex items-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-base">add</span>
+                <span>Créer une Mission</span>
+            </button>
+
+            <div class="h-6 w-px bg-slate-200"></div>
+
+            <div class="flex items-center gap-2.5">
+                <img class="w-9 h-9 rounded-full object-cover ring-2 ring-blue-500/20" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Moussa Diop"/>
+                <span class="text-xs font-bold text-slate-800 hidden sm:inline">Moussa Diop</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sub Navigation Pill Bar -->
+    <div class="bg-white border-b border-slate-200 py-2 px-4 md:px-8 overflow-x-auto hide-scrollbar">
+        <div class="max-w-7xl mx-auto flex items-center gap-2 text-xs font-medium">
+            <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">home</span>
+                <span>Accueil Hub</span>
+            </a>
+            <a href="missions.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition flex items-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-sm">assignment_turned_in</span>
+                <span>Suivi des Missions</span>
+            </a>
+            <a href="employee-portal.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">fingerprint</span>
+                <span>Pointage</span>
+            </a>
+            <a href="dashboard.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">dashboard</span>
+                <span>Dashboard RH</span>
+            </a>
+            <a href="tracking.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">location_on</span>
+                <span>Suivi GPS</span>
+            </a>
+            <a href="payroll.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">receipt_long</span>
+                <span>Paie</span>
+            </a>
+            <a href="leaves.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                <span>Congés</span>
+            </a>
+            <a href="chat.html" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 font-semibold hover:bg-indigo-100 transition flex items-center gap-1.5 ml-auto">
+                <span class="material-symbols-outlined text-sm">smart_toy</span>
+                <span>Assistant RH IA</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-8">
+        
+        <!-- Header Page Title -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Supervision & Dispatching des Missions</h1>
+                <p class="text-xs md:text-sm text-slate-500 mt-1">Assignation des tournées, avancement kilométrique et contrôle qualité en direct.</p>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <select id="missionFilterSelect" onchange="filterMissions()" class="bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-blue-500">
+                    <option value="ALL">Toutes les missions</option>
+                    <option value="inProgress">En cours d'exécution</option>
+                    <option value="completed">Terminées avec succès</option>
+                    <option value="pending">En attente de départ</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- KPI Strip -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Missions Actives</span>
+                <p id="kpiActiveMissions" class="text-2xl md:text-3xl font-extrabold text-blue-600 mt-2">24</p>
+                <p class="text-[11px] text-slate-500 mt-1">Dont 8 tournées prioritaires</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Taux de Ponctualité</span>
+                <p class="text-2xl md:text-3xl font-extrabold text-emerald-600 mt-2">94.8%</p>
+                <p class="text-[11px] text-emerald-600 font-semibold mt-1">Conforme SLA Client</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Missions Complétées</span>
+                <p id="kpiCompletedMissions" class="text-2xl md:text-3xl font-extrabold text-indigo-600 mt-2">18</p>
+                <p class="text-[11px] text-slate-500 mt-1">Sur les dernières 24h</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Optimisation Trajet IA</span>
+                <p class="text-2xl md:text-3xl font-extrabold text-cyan-600 mt-2">-14% km</p>
+                <p class="text-[11px] text-slate-500 mt-1">Carbone & temps économisés</p>
+            </div>
+        </div>
+
+        <!-- Missions Cards Grid -->
+        <div id="missionsGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rendered dynamically by JS -->
+        </div>
+
+    </main>
+
+    <!-- Modal: Créer une Mission -->
+    <div id="newMissionModal" class="modal-backdrop">
+        <div class="modal-content max-w-lg p-6 relative">
+            <button onclick="closeNewMissionModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                <span class="material-symbols-outlined text-lg">close</span>
+            </button>
+
+            <div class="mb-5">
+                <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Dispatching Logistique</span>
+                <h3 class="text-lg font-bold text-slate-900 mt-0.5">Planifier une Nouvelle Mission</h3>
+                <p class="text-xs text-slate-500">L'agent recevra une notification instantanée sur son application.</p>
+            </div>
+
+            <form onsubmit="handleCreateMission(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Intitulé de la Mission</label>
+                    <input id="modalMisTitle" type="text" required placeholder="ex: Livraison Sécurisée Banque Populaire" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium"/>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Collaborateur Assigné</label>
+                        <select id="modalMisAssignee" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium">
+                            <option value="Moussa Diop">Moussa Diop (Opérations)</option>
+                            <option value="Jean Dupont">Jean Dupont (IT)</option>
+                            <option value="Daniel Gomis">Daniel Gomis (Logistique)</option>
+                            <option value="Lucas Mercier">Lucas Mercier (Ventes)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Priorité</label>
+                        <select id="modalMisPriority" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium">
+                            <option value="Normale">Normale</option>
+                            <option value="Haute">Haute</option>
+                            <option value="Urgente">Urgente (SLA 2h)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Lieu / Destination</label>
+                        <input id="modalMisLocation" type="text" required placeholder="ex: 18 Rue la Boétie, Paris" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium"/>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Heure Limite (Échéance)</label>
+                        <input id="modalMisDue" type="time" value="17:00" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium"/>
+                    </div>
+                </div>
+
+                <div class="pt-3 flex gap-3">
+                    <button type="submit" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/25 transition">
+                        Enregistrer & Transmettre
+                    </button>
+                    <button type="button" onclick="closeNewMissionModal()" class="px-4 py-3 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-semibold text-xs transition">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="missionsToastContainer"></div>
+
+    <script src="missions.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>
+

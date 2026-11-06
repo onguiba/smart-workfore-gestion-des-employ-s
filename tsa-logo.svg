@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768" width="1024" height="768">
+  <defs>
+    <style>
+      .tsa-blue { fill: #1a5490; }
+      .tsa-bronze { fill: #8b6534; }
+      .tsa-gray { fill: #7a7a7a; }
+    </style>
+  </defs>
+  
+  <!-- Lettre T (Bleu) -->
+  <path class="tsa-blue" d="M10,241 L261,241 L261,328 L180,328 L180,718 L91,718 L91,328 L10,328 Z"/>
+  
+  <!-- Lettre S (Bleu) -->
+  <path class="tsa-blue" d="M300,241 Q480,241 510,340 Q540,439 450,490 Q500,520 520,600 Q540,680 450,718 Q360,756 280,718 Q200,680 280,640 L330,690 Q380,710 420,690 Q460,670 450,630 Q440,590 390,570 L340,570 L340,510 L390,510 Q430,490 430,450 Q430,410 390,390 Q350,370 310,390 L270,430 L230,380 Q280,241 300,241 Z"/>
+  
+  <!-- Lettre A (Bronze/Marron) -->
+  <path class="tsa-bronze" d="M660,241 L850,241 L920,718 L830,718 L810,620 L700,620 L680,718 L590,718 Z M720,550 L790,550 L755,350 Z"/>
+  
+  <!-- Arc gris (symbole de mouvement/transport) -->
+  <path class="tsa-gray" d="M680,400 Q850,500 950,680 L890,710 Q800,550 680,470 Z" opacity="0.8"/>
+</svg>

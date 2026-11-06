@@ -1,55 +1,27 @@
 ﻿# ==============================================================================
-# TSA SmartWorkforce AI™ — Configuration Apache / Hostinger
-# Architecture Hybride Universelle : PHP Natif + Node.js
+# TSA SmartWorkforce AI - Configuration Apache / Hostinger
 # ==============================================================================
 
 RewriteEngine On
 
-# 1. En-têtes CORS Globaux
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
     Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
 </IfModule>
 
-# 2. Routage Central des API vers le Backend PHP Hostinger
+# 1. Routage des appels API vers le routeur PHP backend/api/index.php
 RewriteRule ^api/(.*)$ backend/api/index.php?route=$1 [L,QSA]
 RewriteRule ^api$ backend/api/index.php?route= [L,QSA]
 
-# Compatibilité anciennes routes
+# Alias supplémentaires
 RewriteRule ^src/backend/employees-api\.php$ backend/api/index.php [L,QSA]
 RewriteRule ^api/employees\.php$ backend/api/index.php?route=employees [L,QSA]
 
-# 3. Documents par défaut
-DirectoryIndex index.php index.html frontend/home.html
+# 2. Pages d'accueil par défaut
+DirectoryIndex home.html index.php index.html
 
-# 4. Servir les fichiers frontend si demandés à la racine (ex: /home.html -> /frontend/home.html)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{DOCUMENT_ROOT}/frontend/ -f
-RewriteRule ^(.*)$ frontend/$1 [L]
-
-# 5. Sécurité : Empêcher le téléchargement direct des fichiers sensibles
-<FilesMatch "\.(env|json|sql|log|sh|bat)$">
-    <IfModule mod_authz_core.c>
-        Require all denied
-    </IfModule>
-    <IfModule !mod_authz_core.c>
-        Order allow,deny
-        Deny from all
-    </IfModule>
-</FilesMatch>
-
-# 6. Compression et mise en cache
+# 3. Compression
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
-</IfModule>
-
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType image/jpeg "access plus 1 month"
-    ExpiresByType image/png "access plus 1 month"
-    ExpiresByType image/svg+xml "access plus 1 month"
-    ExpiresByType text/css "access plus 1 week"
-    ExpiresByType application/javascript "access plus 1 week"
 </IfModule>

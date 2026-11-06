@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * TSA SmartWorkforce AI — Configuration & Base de Données Universelle
  * Compatible :

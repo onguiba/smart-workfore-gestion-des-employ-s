@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * TSA SmartWorkforce AI™ — Routeur Central de l'API REST
  * Ce fichier répond à toutes les requêtes /api/*

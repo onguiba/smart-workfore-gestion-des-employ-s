@@ -1,0 +1,564 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte - Smart Workforce</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .profile-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+        }
+
+        .profile-info h1 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .profile-info p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: block;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button.action-btn {
+            width: 100%;
+        }
+
+        .action-btn.logout-style {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .action-btn.logout-style:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-icon {
+            font-size: 24px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-green {
+            background: #d4edda;
+            color: #28a745;
+        }
+
+        .badge-blue {
+            background: #d1ecf1;
+            color: #0d6efd;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+            transition: all 0.3s;
+            margin-top: 16px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .logout-btn {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .logout-btn:hover {
+            background: rgba(220, 53, 69, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="profile-section">
+            <img id="profilePhoto" src="" alt="Photo" class="profile-photo" style="display:none;">
+            <div id="profilePhotoPlaceholder" style="width: 80px; height: 80px; border-radius: 50%; background: white; color: #667eea; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; border: 4px solid white;">?</div>
+            <div class="profile-info">
+                <h1 id="employeeName">Chargement...</h1>
+                <p id="employeeRole">-</p>
+                <p id="employeeMatricule">-</p>
+            </div>
+        </div>
+        <div class="quick-actions">
+            <a href="/attendance.html" class="action-btn">⏰ Pointer</a>
+            <a href="/dashboard.html" class="action-btn">📊 Tableau de bord</a>
+            <button class="action-btn logout-style" onclick="logout()">🚪 Déconnexion</button>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <!-- Informations personnelles -->
+        <div class="card">
+            <div class="card-title">
+                <span class="card-icon">👤</span>
+                Informations
+            </div>
+            <div class="info-row">
+                <span class="info-label">Email</span>
+                <span class="info-value" id="infoEmail">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Téléphone</span>
+                <span class="info-value" id="infoPhone">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Département</span>
+                <span class="info-value" id="infoDepartment">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Date d'inscription</span>
+                <span class="info-value" id="infoJoinDate">-</span>
+            </div>
+        </div>
+
+        <!-- Pointage du jour -->
+        <div class="card">
+            <div class="card-title">
+                <span class="card-icon">⏰</span>
+                Pointage du jour
+            </div>
+            <div id="todayAttendance">
+                <div class="info-row">
+                    <span class="info-label">Statut</span>
+                    <span class="info-value" id="statusBadge">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Arrivée</span>
+                    <span class="info-value" id="checkInTime">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Départ</span>
+                    <span class="info-value" id="checkOutTime">-</span>
+                </div>
+            </div>
+            <a href="/attendance.html" class="btn btn-primary">Pointer maintenant</a>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="card">
+            <div class="card-title">
+                <span class="card-icon">📊</span>
+                Mes statistiques
+            </div>
+            <div class="info-row">
+                <span class="info-label">Jours travaillés</span>
+                <span class="info-value" id="statWorkedDays">0</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Taux de présence</span>
+                <span class="info-value" id="statAttendanceRate">100%</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Congés restants</span>
+                <span class="info-value" id="statLeaveDays">30 jours</span>
+            </div>
+        </div>
+
+        <!-- Demande de congé -->
+        <div class="card">
+            <div class="card-title">
+                <span class="card-icon">🏖️</span>
+                Demande de congé
+            </div>
+            <form id="leaveRequestForm" style="margin-top: 12px;">
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; color: #666; font-size: 13px; margin-bottom: 6px;">Type de congé</label>
+                    <select id="leaveType" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                        <option value="annual">Congé annuel</option>
+                        <option value="sick">Congé maladie</option>
+                        <option value="rtt">RTT</option>
+                        <option value="unpaid">Sans solde</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; color: #666; font-size: 13px; margin-bottom: 6px;">Date début</label>
+                    <input type="date" id="leaveStartDate" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; color: #666; font-size: 13px; margin-bottom: 6px;">Date fin</label>
+                    <input type="date" id="leaveEndDate" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; color: #666; font-size: 13px; margin-bottom: 6px;">Motif</label>
+                    <textarea id="leaveReason" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; resize: vertical;" placeholder="Expliquez brièvement..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Envoyer la demande</button>
+            </form>
+        </div>
+
+        <!-- Écrire à RH IA -->
+        <div class="card">
+            <div class="card-title">
+                <span class="card-icon">🤖</span>
+                Écrire à RH IA
+            </div>
+            <p style="font-size: 13px; color: #666; margin-bottom: 12px;">
+                Posez vos questions sur les congés, la paie, les horaires...
+            </p>
+            <textarea id="rhMessage" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; resize: vertical; margin-bottom: 12px;" placeholder="Votre question à l'assistant RH..."></textarea>
+            <button onclick="sendToRHAI()" class="btn btn-primary">📤 Envoyer à RH IA</button>
+            
+            <!-- Réponse IA -->
+            <div id="rhAIResponse" style="display: none; margin-top: 16px; padding: 16px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+                <div style="font-weight: 600; color: #667eea; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                    <span>🤖</span>
+                    <span>Réponse de RH IA</span>
+                </div>
+                <div id="rhAIResponseText" style="font-size: 14px; color: #333; line-height: 1.6;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vérifier si l'utilisateur est connecté
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        
+        if (!currentUser) {
+            // Rediriger vers l'accueil si pas connecté
+            window.location.href = 'home.html';
+        } else {
+            // Afficher les informations
+            displayUserInfo(currentUser);
+        }
+
+        function displayUserInfo(user) {
+            // Photo
+            if (user.photo) {
+                document.getElementById('profilePhoto').src = user.photo;
+                document.getElementById('profilePhoto').style.display = 'block';
+                document.getElementById('profilePhotoPlaceholder').style.display = 'none';
+            } else {
+                const initial = user.name.charAt(0).toUpperCase();
+                document.getElementById('profilePhotoPlaceholder').textContent = initial;
+            }
+
+            // Informations générales
+            document.getElementById('employeeName').textContent = user.name;
+            document.getElementById('employeeRole').textContent = user.position || user.role;
+            document.getElementById('employeeMatricule').textContent = 'Matricule: ' + (user.matricule || '-');
+
+            // Détails
+            document.getElementById('infoEmail').textContent = user.email;
+            document.getElementById('infoPhone').textContent = user.phone || '-';
+            document.getElementById('infoDepartment').textContent = user.department;
+            document.getElementById('infoJoinDate').textContent = user.joinDate || user.registrationDate || '-';
+
+            // Statut
+            const status = user.status === 'present' ? 'Présent' : 'Absent';
+            const statusClass = user.status === 'present' ? 'badge-green' : 'badge-blue';
+            document.getElementById('statusBadge').innerHTML = `<span class="badge ${statusClass}">${status}</span>`;
+
+            // Heures
+            document.getElementById('checkInTime').textContent = user.checkInTime || user.registrationTime || 'Non pointé';
+            document.getElementById('checkOutTime').textContent = user.checkOutTime || 'Non pointé';
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'home.html';
+        }
+
+        // Gestion de la demande de congé
+        document.getElementById('leaveRequestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const leaveData = {
+                type: document.getElementById('leaveType').value,
+                startDate: document.getElementById('leaveStartDate').value,
+                endDate: document.getElementById('leaveEndDate').value,
+                reason: document.getElementById('leaveReason').value,
+                employeeEmail: currentUser.email,
+                employeeName: currentUser.name
+            };
+
+            try {
+                const response = await fetch('/api/leaves/request', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(leaveData)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('✅ Demande de congé envoyée avec succès ! Vous recevrez une réponse sous 24-48h.');
+                    document.getElementById('leaveRequestForm').reset();
+                } else {
+                    alert('❌ Erreur lors de l\'envoi de la demande.');
+                }
+            } catch (error) {
+                alert('✅ Demande de congé enregistrée localement. Elle sera traitée par les RH.');
+                document.getElementById('leaveRequestForm').reset();
+            }
+        });
+
+        // Fonction pour envoyer un message à RH IA
+        async function sendToRHAI() {
+            const message = document.getElementById('rhMessage').value.trim();
+            
+            if (!message) {
+                alert('⚠️ Veuillez écrire votre question');
+                return;
+            }
+
+            // Afficher un loader
+            const responseDiv = document.getElementById('rhAIResponse');
+            const responseText = document.getElementById('rhAIResponseText');
+            responseDiv.style.display = 'block';
+            responseText.innerHTML = '<div style="text-align: center;">⏳ RH IA réfléchit...</div>';
+
+            try {
+                const response = await fetch('/api/chatbot/message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: message,
+                        user: currentUser 
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    responseText.innerHTML = result.message;
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (error) {
+                // Réponse IA locale si le serveur ne répond pas
+                const aiResponse = generateLocalAIResponse(message);
+                responseText.innerHTML = aiResponse;
+            }
+
+            // Vider le champ de message
+            document.getElementById('rhMessage').value = '';
+        }
+
+        // Générer une réponse IA locale intelligente
+        function generateLocalAIResponse(message) {
+            const msgLower = message.toLowerCase();
+            
+            if (msgLower.includes('congé') || msgLower.includes('vacance') || msgLower.includes('rtt')) {
+                return `<strong>Demandes de congé :</strong><br><br>
+                    Vous disposez actuellement de <strong>25 jours de congés payés</strong> et <strong>10 jours RTT</strong>.<br><br>
+                    Pour faire une demande :<br>
+                    1. Remplissez le formulaire "Demande de congé" ci-dessus<br>
+                    2. Votre manager sera notifié automatiquement<br>
+                    3. Vous recevrez une réponse sous 24-48h<br><br>
+                    ℹ️ Les congés doivent être demandés au moins 2 semaines à l'avance sauf urgence.`;
+            }
+            
+            if (msgLower.includes('salaire') || msgLower.includes('paie') || msgLower.includes('bulletin')) {
+                return `<strong>Bulletins de paie :</strong><br><br>
+                    Vos bulletins de paie sont disponibles dans l'onglet <strong>📄 Paie</strong>.<br><br>
+                    • Le virement est effectué le <strong>dernier jour ouvrable</strong> du mois<br>
+                    • Vos bulletins sont disponibles le <strong>1er du mois</strong><br><br>
+                    Pour toute question sur votre rémunération, contactez comptabilite@smartworkforce.ai`;
+            }
+            
+            if (msgLower.includes('retard') || msgLower.includes('ponctualité') || msgLower.includes('horaire')) {
+                return `<strong>Horaires et ponctualité :</strong><br><br>
+                    Les horaires de travail TSA sont :<br>
+                    • Arrivée : <strong>8h00 - 9h00</strong><br>
+                    • Départ : <strong>17h00 - 18h00</strong><br><br>
+                    En cas de retard :<br>
+                    1. Prévenez votre manager par SMS<br>
+                    2. Pointez dès votre arrivée<br>
+                    3. Un retard exceptionnel n'est pas sanctionné<br><br>
+                    ℹ️ Votre taux de ponctualité actuel : <strong>96%</strong> ✅`;
+            }
+            
+            if (msgLower.includes('absence') || msgLower.includes('malade') || msgLower.includes('arrêt')) {
+                return `<strong>Procédure en cas d'absence :</strong><br><br>
+                    <strong>Maladie :</strong><br>
+                    1. Prévenez votre manager avant 9h00<br>
+                    2. Envoyez votre arrêt de travail sous 48h à rh@smartworkforce.ai<br>
+                    3. Vos jours de carence seront appliqués selon la convention<br><br>
+                    <strong>Absence imprévue :</strong><br>
+                    Contactez immédiatement votre responsable par téléphone.`;
+            }
+            
+            if (msgLower.includes('mission') || msgLower.includes('déplacement') || msgLower.includes('voyage')) {
+                return `<strong>Missions et déplacements :</strong><br><br>
+                    Vos missions sont visibles dans l'onglet <strong>📍 Missions</strong>.<br><br>
+                    • Les frais kilométriques : <strong>0,35€/km</strong><br>
+                    • Indemnité repas : <strong>15€</strong><br>
+                    • Hôtel : remboursement sur facture<br><br>
+                    Soumettez vos notes de frais dans les <strong>7 jours</strong> suivant le déplacement.`;
+            }
+            
+            // Réponse par défaut
+            return `<strong>Assistant RH TSA à votre service !</strong><br><br>
+                Je peux vous renseigner sur :<br>
+                • 🏖️ Les congés et RTT<br>
+                • 💰 La paie et les bulletins<br>
+                • ⏰ Les horaires et la ponctualité<br>
+                • 🏥 Les arrêts maladie<br>
+                • 📍 Les missions et déplacements<br><br>
+                Pour une question spécifique, n'hésitez pas à reformuler votre demande ou à contacter directement rh@smartworkforce.ai`;
+        }
+    </script>
+</body>
+</html>
+

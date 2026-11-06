@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Employé — TSA SmartWorkforce AI™</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        @keyframes pulse-slow { 0%,100%{opacity:1} 50%{opacity:.5} }
+        .animate-pulse-slow { animation: pulse-slow 2s infinite; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .fade-in { animation: fadeIn 0.4s ease forwards; }
+    </style>
+</head>
+<body class="bg-slate-950 min-h-screen text-white">
+
+    <!-- Navigation -->
+    <nav class="bg-slate-900 border-b border-white/5 px-4 py-3 flex items-center justify-between sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white text-sm">person</span>
+            </div>
+            <span class="font-bold text-white text-sm">Espace Employé</span>
+            <span class="text-slate-500 text-xs hidden sm:block">— TSA SmartWorkforce AI™</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span id="navClock" class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-1 rounded hidden sm:block"></span>
+            <a href="attendance.html" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">face</span>
+                <span class="hidden sm:inline">Pointage</span>
+            </a>
+            <a href="home.html" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">home</span>
+            </a>
+            <button onclick="logout()" class="bg-rose-900/60 hover:bg-rose-700 text-rose-300 hover:text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1 border border-rose-500/20">
+                <span class="material-symbols-outlined text-sm">logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-4 md:p-6 space-y-5">
+
+        <!-- Profil Employé -->
+        <div id="profileSection" class="bg-gradient-to-br from-blue-900/60 to-slate-900 border border-blue-500/20 rounded-2xl p-5 fade-in">
+            <div class="flex items-center gap-4">
+                <div id="avatarContainer" class="w-16 h-16 rounded-2xl bg-blue-700 flex items-center justify-center text-2xl font-black text-white flex-shrink-0 overflow-hidden">
+                    <span id="avatarInitial">?</span>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <h1 id="empName" class="text-xl font-black text-white">Chargement...</h1>
+                        <span id="statusBadge" class="hidden px-2 py-0.5 rounded-full text-xs font-bold"></span>
+                    </div>
+                    <p id="empRole" class="text-sm text-blue-300 font-semibold"></p>
+                    <p id="empMeta" class="text-xs text-slate-400 mt-1 font-mono"></p>
+                </div>
+                <div class="text-right hidden sm:block">
+                    <div class="text-xs text-slate-400">Aujourd'hui</div>
+                    <div id="todayDate" class="text-sm font-bold text-white"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pointage du Jour -->
+        <div class="bg-slate-900 border border-white/5 rounded-2xl p-5 fade-in">
+            <h2 class="font-bold text-white mb-4 flex items-center gap-2 text-sm">
+                <span class="material-symbols-outlined text-blue-400 text-lg">schedule</span>
+                Pointage du Jour
+            </h2>
+            <div class="grid grid-cols-3 gap-3 mb-4">
+                <div class="bg-slate-800/60 rounded-xl p-3 text-center border border-emerald-500/20">
+                    <div class="text-xs text-emerald-400 font-semibold mb-2 flex items-center justify-center gap-1">
+                        <span class="material-symbols-outlined text-sm">login</span> Arrivée
+                    </div>
+                    <div id="checkInDisplay" class="text-lg font-black font-mono text-emerald-300">—</div>
+                    <div class="text-[10px] text-slate-500 mt-1">Heure pointée</div>
+                </div>
+                <div class="bg-slate-800/60 rounded-xl p-3 text-center border border-rose-500/20">
+                    <div class="text-xs text-rose-400 font-semibold mb-2 flex items-center justify-center gap-1">
+                        <span class="material-symbols-outlined text-sm">logout</span> Départ
+                    </div>
+                    <div id="checkOutDisplay" class="text-lg font-black font-mono text-rose-300">—</div>
+                    <div class="text-[10px] text-slate-500 mt-1">Heure pointée</div>
+                </div>
+                <div class="bg-slate-800/60 rounded-xl p-3 text-center border border-amber-500/20">
+                    <div class="text-xs text-amber-400 font-semibold mb-2 flex items-center justify-center gap-1">
+                        <span class="material-symbols-outlined text-sm">timer</span> Durée
+                    </div>
+                    <div id="durationDisplay" class="text-lg font-black font-mono text-amber-300">—</div>
+                    <div class="text-[10px] text-slate-500 mt-1">Temps travaillé</div>
+                </div>
+            </div>
+
+            <!-- Bouton Pointage Rapide -->
+            <a href="attendance.html" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-sm transition shadow-lg shadow-blue-600/20">
+                <span class="material-symbols-outlined">face</span>
+                Accéder au Pointage Biométrique (Face ID)
+            </a>
+        </div>
+
+        <!-- Accès Rapides -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 fade-in">
+            <a href="attendance.html" class="bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-blue-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 transition group">
+                <div class="w-10 h-10 rounded-xl bg-blue-600/20 group-hover:bg-blue-600/40 flex items-center justify-center transition">
+                    <span class="material-symbols-outlined text-blue-400">fingerprint</span>
+                </div>
+                <span class="text-xs font-bold text-white text-center">Pointage</span>
+                <span class="text-[10px] text-slate-500 text-center">Face ID / Email</span>
+            </a>
+            <a href="leaves.html" class="bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-emerald-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 transition group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-600/20 group-hover:bg-emerald-600/40 flex items-center justify-center transition">
+                    <span class="material-symbols-outlined text-emerald-400">beach_access</span>
+                </div>
+                <span class="text-xs font-bold text-white text-center">Congés</span>
+                <span class="text-[10px] text-slate-500 text-center">Mes demandes</span>
+            </a>
+            <a href="payroll.html" class="bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-amber-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 transition group">
+                <div class="w-10 h-10 rounded-xl bg-amber-600/20 group-hover:bg-amber-600/40 flex items-center justify-center transition">
+                    <span class="material-symbols-outlined text-amber-400">payments</span>
+                </div>
+                <span class="text-xs font-bold text-white text-center">Paie</span>
+                <span class="text-[10px] text-slate-500 text-center">Fiches de salaire</span>
+            </a>
+            <a href="missions.html" class="bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-purple-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 transition group">
+                <div class="w-10 h-10 rounded-xl bg-purple-600/20 group-hover:bg-purple-600/40 flex items-center justify-center transition">
+                    <span class="material-symbols-outlined text-purple-400">flight_takeoff</span>
+                </div>
+                <span class="text-xs font-bold text-white text-center">Missions</span>
+                <span class="text-[10px] text-slate-500 text-center">En cours</span>
+            </a>
+            <a href="tracking.html" class="bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-cyan-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 transition group">
+                <div class="w-10 h-10 rounded-xl bg-cyan-600/20 group-hover:bg-cyan-600/40 flex items-center justify-center transition">
+                    <span class="material-symbols-outlined text-cyan-400">location_on</span>
+                </div>
+                <span class="text-xs font-bold text-white text-center">Tracking</span>
+                <span class="text-[10px] text-slate-500 text-center">Ma position</span>
+            </a>
+            <a href="chat.html" class="bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-rose-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 transition group">
+                <div class="w-10 h-10 rounded-xl bg-rose-600/20 group-hover:bg-rose-600/40 flex items-center justify-center transition">
+                    <span class="material-symbols-outlined text-rose-400">smart_toy</span>
+                </div>
+                <span class="text-xs font-bold text-white text-center">Assistant IA</span>
+                <span class="text-[10px] text-slate-500 text-center">RH IA Chat</span>
+            </a>
+        </div>
+
+        <!-- Historique Récent -->
+        <div class="bg-slate-900 border border-white/5 rounded-2xl p-5 fade-in">
+            <h2 class="font-bold text-white mb-4 flex items-center gap-2 text-sm">
+                <span class="material-symbols-outlined text-slate-400 text-lg">history</span>
+                Historique Récent
+            </h2>
+            <div id="historyList" class="space-y-2">
+                <div class="text-center py-6 text-slate-500 text-sm">
+                    <span class="material-symbols-outlined text-3xl block mb-2">sync</span>
+                    Chargement...
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-xs text-slate-600 pb-4">
+            TSA SmartWorkforce AI™ — Transport &amp; Services d'Afrique
+        </div>
+    </div>
+
+    <script>
+        // Horloge
+        function tick() {
+            const el = document.getElementById('navClock');
+            if (el) el.textContent = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+        tick(); setInterval(tick, 1000);
+
+        // Date du jour
+        document.getElementById('todayDate').textContent = new Date().toLocaleDateString('fr-FR', {
+            weekday: 'long', day: 'numeric', month: 'long'
+        });
+
+        function calcDuration(inT, outT) {
+            if (!inT || !outT) return null;
+            const [h1, m1] = inT.split(':').map(Number);
+            const [h2, m2] = outT.split(':').map(Number);
+            if (isNaN(h1) || isNaN(h2)) return null;
+            let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+            if (diff < 0) diff += 1440;
+            return `${Math.floor(diff / 60)}h ${(diff % 60).toString().padStart(2, '0')}min`;
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('swaSession');
+            window.location.href = 'login.html';
+        }
+
+        async function loadPortal() {
+            // Lire l'utilisateur depuis localStorage
+            let session = null;
+            try {
+                session = JSON.parse(localStorage.getItem('currentUser') || localStorage.getItem('swaSession') || 'null');
+            } catch(e) {}
+
+            if (!session) {
+                // Pas de session → tenter de charger depuis l'API avec le premier employé
+                // ou rediriger vers login
+                document.getElementById('empName').textContent = 'Non connecté';
+                document.getElementById('empRole').textContent = 'Veuillez vous connecter';
+                document.getElementById('avatarInitial').textContent = '?';
+                return;
+            }
+
+            // Afficher les infos de profil
+            const name = session.name || session.fullName || 'Employé';
+            const role = session.position || session.role || 'Collaborateur';
+            const dept = session.department || '';
+            const matricule = session.matricule || session.id || '';
+
+            document.getElementById('empName').textContent = name;
+            document.getElementById('empRole').textContent = `${role}${dept ? ' • ' + dept : ''}`;
+            document.getElementById('empMeta').textContent = `Matricule: ${matricule}${session.email ? ' • ' + session.email : ''}`;
+            document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
+
+            // Badge statut
+            const badge = document.getElementById('statusBadge');
+            badge.classList.remove('hidden');
+            if (session.status === 'present') {
+                badge.textContent = '✓ Présent';
+                badge.className = 'px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-950 text-emerald-400 border border-emerald-500/30';
+            } else {
+                badge.textContent = 'En attente';
+                badge.className = 'px-2 py-0.5 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-white/10';
+            }
+
+            // Charger les données de pointage du jour depuis l'API
+            try {
+                const res = await fetch('/api/employees/identify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: session.email || session.matricule })
+                });
+                const data = await res.json();
+                if (data.success && data.todayStatus) {
+                    const ts = data.todayStatus;
+                    const inTime = ts.checkInTime;
+                    const outTime = ts.checkOutTime;
+                    const dur = ts.duration || calcDuration(inTime, outTime);
+
+                    document.getElementById('checkInDisplay').textContent = inTime || '—';
+                    document.getElementById('checkOutDisplay').textContent = outTime || (inTime ? 'En cours' : '—');
+                    document.getElementById('durationDisplay').textContent = dur || (inTime ? calcDuration(inTime, new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})) || '—' : '—');
+
+                    if (inTime) {
+                        document.getElementById('checkInDisplay').className = 'text-lg font-black font-mono text-emerald-400';
+                    }
+                    if (outTime) {
+                        document.getElementById('checkOutDisplay').className = 'text-lg font-black font-mono text-rose-400';
+                    }
+                }
+            } catch(e) {
+                // Fallback sur données locales
+                const inTime = session.checkInTime;
+                const outTime = session.checkOutTime;
+                if (inTime && inTime !== '-') {
+                    document.getElementById('checkInDisplay').textContent = inTime;
+                    document.getElementById('checkInDisplay').className = 'text-lg font-black font-mono text-emerald-400';
+                }
+                if (outTime && outTime !== '-') {
+                    document.getElementById('checkOutDisplay').textContent = outTime;
+                    document.getElementById('checkOutDisplay').className = 'text-lg font-black font-mono text-rose-400';
+                    const dur = calcDuration(inTime, outTime);
+                    if (dur) document.getElementById('durationDisplay').textContent = dur;
+                }
+            }
+
+            // Charger l'historique
+            loadHistory(session);
+        }
+
+        async function loadHistory(session) {
+            const listElem = document.getElementById('historyList');
+            try {
+                const res = await fetch('/api/attendance/history');
+                const data = await res.json();
+                let records = Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []);
+
+                // Filtrer par employé si possible
+                if (session && session.email) {
+                    const filtered = records.filter(r =>
+                        (r.employeeEmail && r.employeeEmail.toLowerCase() === session.email.toLowerCase()) ||
+                        (r.employeeId && r.employeeId == session.id)
+                    );
+                    if (filtered.length > 0) records = filtered;
+                }
+
+                if (records.length === 0) {
+                    listElem.innerHTML = `<div class="text-center py-6 text-slate-500 text-sm">
+                        <span class="material-symbols-outlined text-2xl block mb-1">event_note</span>
+                        Aucun pointage enregistré. <a href="attendance.html" class="text-blue-400 hover:underline">Pointer maintenant</a>
+                    </div>`;
+                    return;
+                }
+
+                listElem.innerHTML = records.slice(0, 6).map(r => {
+                    const isIn = r.type === 'checkin';
+                    const time = r.check_time_formatted || r.checkInTimeFormatted || r.checkOutTimeFormatted || '--:--';
+                    const dur = r.duration ? ` • ${r.duration}` : '';
+                    const color = isIn
+                        ? 'text-emerald-400 bg-emerald-950/60 border-emerald-500/30'
+                        : 'text-rose-400 bg-rose-950/60 border-rose-500/30';
+                    const icon = isIn ? 'login' : 'logout';
+                    const label = isIn ? 'Arrivée' : 'Départ';
+                    const date = r.checkInDate || r.checkOutDate || new Date().toLocaleDateString('fr-FR');
+
+                    return `<div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/50 border border-white/5">
+                        <div class="flex items-center gap-2.5">
+                            <span class="p-1.5 rounded-lg ${color} border flex items-center">
+                                <span class="material-symbols-outlined text-sm">${icon}</span>
+                            </span>
+                            <div>
+                                <p class="text-xs font-bold text-white">${label}</p>
+                                <p class="text-[10px] text-slate-400 font-mono">${date}${dur}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono font-bold ${isIn ? 'text-emerald-400' : 'text-rose-400'}">${time}</span>
+                    </div>`;
+                }).join('');
+            } catch(e) {
+                listElem.innerHTML = `<div class="text-center py-4 text-slate-500 text-sm">Impossible de charger l'historique.</div>`;
+            }
+        }
+
+        loadPortal();
+    </script>
+</body>
+</html>
+
