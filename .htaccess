@@ -1,32 +1,36 @@
 ﻿# ==============================================================================
-# TSA SmartWorkforce AI - Hostinger Configuration
-# Architecture Frontend & Backend séparés
+# TSA SmartWorkforce AI™ — Configuration Apache / Hostinger
+# Architecture Hybride Universelle : PHP Natif + Node.js
 # ==============================================================================
 
 RewriteEngine On
 
+# 1. En-têtes CORS Globaux
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
     Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
 </IfModule>
 
-# 1. Requêtes API routées vers Node.js
-<IfModule mod_proxy.c>
-    RewriteCond %{REQUEST_URI} ^/api/ [NC]
-    RewriteRule ^api/(.*)$ http://127.0.0.1:3000/api/$1 [P,L]
-</IfModule>
+# 2. Routage Central des API vers le Backend PHP Hostinger
+RewriteRule ^api/(.*)$ backend/api/index.php?route=$1 [L,QSA]
+RewriteRule ^api$ backend/api/index.php?route= [L,QSA]
 
-# 2. Servir les fichiers frontend directement depuis frontend/
+# Compatibilité anciennes routes
+RewriteRule ^src/backend/employees-api\.php$ backend/api/index.php [L,QSA]
+RewriteRule ^api/employees\.php$ backend/api/index.php?route=employees [L,QSA]
+
+# 3. Documents par défaut
+DirectoryIndex index.php index.html frontend/home.html
+
+# 4. Servir les fichiers frontend si demandés à la racine (ex: /home.html -> /frontend/home.html)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{DOCUMENT_ROOT}/frontend/ -f
 RewriteRule ^(.*)$ frontend/$1 [L]
 
-DirectoryIndex index.html frontend/home.html
-
-# 3. Sécurité : masquer les fichiers sensibles internes
-<FilesMatch "\.(env|json|log|sh|bat)$">
+# 5. Sécurité : Empêcher le téléchargement direct des fichiers sensibles
+<FilesMatch "\.(env|json|sql|log|sh|bat)$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -36,6 +40,16 @@ DirectoryIndex index.html frontend/home.html
     </IfModule>
 </FilesMatch>
 
+# 6. Compression et mise en cache
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
 </IfModule>

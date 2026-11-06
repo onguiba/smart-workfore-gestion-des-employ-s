@@ -1,4 +1,4 @@
-Ôªø// Registration Page JavaScript
+// Registration Page JavaScript
 let video = document.getElementById('video');
 let canvas = document.getElementById('canvas');
 let photoData = null;
@@ -26,18 +26,18 @@ function getLocation() {
                 document.getElementById('locationText').innerHTML = `
                     Lat: ${locationData.latitude.toFixed(6)}, 
                     Long: ${locationData.longitude.toFixed(6)}<br>
-                    <small>Pr√©cision: ${Math.round(locationData.accuracy)}m</small>
+                    <small>PrÈcision: ${Math.round(locationData.accuracy)}m</small>
                 `;
                 
                 checkFormReady();
             },
             (error) => {
-                showAlert('Erreur: Impossible de r√©cup√©rer la localisation. Veuillez activer le GPS.', 'error');
+                showAlert('Erreur: Impossible de rÈcupÈrer la localisation. Veuillez activer le GPS.', 'error');
                 console.error('Geolocation error:', error);
             }
         );
     } else {
-        showAlert('Erreur: La g√©olocalisation n\'est pas support√©e par ce navigateur.', 'error');
+        showAlert('Erreur: La gÈolocalisation n\'est pas supportÈe par ce navigateur.', 'error');
     }
 }
 
@@ -58,14 +58,14 @@ document.getElementById('startCamera').addEventListener('click', async () => {
         document.getElementById('startCamera').disabled = true;
         document.getElementById('capturePhoto').disabled = false;
         
-        showAlert('Cam√©ra activ√©e! Positionnez-vous et cliquez sur "Prendre la photo"', 'success');
+        showAlert('CamÈra activÈe! Positionnez-vous et cliquez sur "Prendre la photo"', 'success');
     } catch (err) {
-        showAlert('Erreur: Impossible d\'acc√©der √† la cam√©ra. V√©rifiez les permissions.', 'error');
+        showAlert('Erreur: Impossible d\'accÈder ‡ la camÈra. VÈrifiez les permissions.', 'error');
         console.error('Camera error:', err);
     }
 });
 
-// Capture photo - ‚≠ê VALIDATION AUTOMATIQUE
+// Capture photo - ? VALIDATION AUTOMATIQUE
 document.getElementById('capturePhoto').addEventListener('click', () => {
     const context = canvas.getContext('2d');
     canvas.width = video.videoWidth;
@@ -78,7 +78,7 @@ document.getElementById('capturePhoto').addEventListener('click', () => {
     
     // Display preview
     const preview = document.getElementById('photoPreview');
-    preview.innerHTML = `<img src="${photoData}" class="captured-photo" alt="Photo captur√©e" style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">`;
+    preview.innerHTML = `<img src="${photoData}" class="captured-photo" alt="Photo capturÈe" style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">`;
     
     // Stop camera
     if (stream) {
@@ -89,8 +89,8 @@ document.getElementById('capturePhoto').addEventListener('click', () => {
     document.getElementById('capturePhoto').disabled = true;
     document.getElementById('retakePhoto').style.display = 'inline-block';
     
-    // ‚≠ê VALIDATION AUTOMATIQUE : La photo est valid√©e automatiquement
-    showAlert('‚úÖ Photo captur√©e et valid√©e! Elle sera enregistr√©e dans la base de donn√©es.', 'success');
+    // ? VALIDATION AUTOMATIQUE : La photo est validÈe automatiquement
+    showAlert('? Photo capturÈe et validÈe! Elle sera enregistrÈe dans la base de donnÈes.', 'success');
     
     checkFormReady();
 });
@@ -125,23 +125,23 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     }
     
     if (!locationData) {
-        showAlert('Veuillez activer la g√©olocalisation avant de continuer.', 'error');
+        showAlert('Veuillez activer la gÈolocalisation avant de continuer.', 'error');
         return;
     }
     
-    // G√©n√©rer un email automatique si non fourni
+    // GÈnÈrer un email automatique si non fourni
     let userEmail = document.getElementById('email').value.trim();
     const fullName = document.getElementById('fullName').value;
     
     if (!userEmail) {
-        // Cr√©er un email automatique bas√© sur le nom
+        // CrÈer un email automatique basÈ sur le nom
         const nameParts = fullName.toLowerCase().trim().split(' ');
         const firstName = nameParts[0] || 'employe';
         const lastName = nameParts[nameParts.length - 1] || '';
         const randomNum = Math.floor(1000 + Math.random() * 9000);
         userEmail = `${firstName}.${lastName}${randomNum}@smartworkforce.ai`;
         
-        showAlert(`üìß Email g√©n√©r√© automatiquement: ${userEmail}`, 'success');
+        showAlert(`?? Email gÈnÈrÈ automatiquement: ${userEmail}`, 'success');
     }
     
     const formData = {
@@ -177,12 +177,12 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         const result = await response.json();
         
         if (result.success) {
-            showAlert('‚úÖ Inscription r√©ussie! Photo enregistr√©e dans la base de donn√©es. Redirection...', 'success');
+            showAlert('? Inscription rÈussie! Photo enregistrÈe dans la base de donnÈes. Redirection...', 'success');
             
             // Sauvegarder l'utilisateur dans localStorage
             localStorage.setItem('currentUser', JSON.stringify(result.data));
             
-            // ‚≠ê Enregistrer le premier pointage automatiquement
+            // ? Enregistrer le premier pointage automatiquement
             try {
                 await fetch('/api/employees/checkin', {
                     method: 'POST',
@@ -214,7 +214,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
             throw new Error(result.message || result.error || 'Erreur lors de l\'inscription');
         }
     } catch (error) {
-        showAlert('‚ùå Erreur: ' + error.message, 'error');
+        showAlert('? Erreur: ' + error.message, 'error');
         console.error('Registration error:', error);
     } finally {
         document.getElementById('loading').style.display = 'none';
@@ -248,7 +248,7 @@ document.getElementById('email').addEventListener('blur', function() {
     
     if (!emailPattern.test(email)) {
         this.style.borderColor = 'orange';
-        showAlert('Format d\'email invalide (sera g√©n√©r√© automatiquement si vide)', 'warning');
+        showAlert('Format d\'email invalide (sera gÈnÈrÈ automatiquement si vide)', 'warning');
     } else {
         this.style.borderColor = 'green';
     }
@@ -260,7 +260,7 @@ document.getElementById('phone').addEventListener('blur', function() {
     
     if (!phonePattern.test(phone.replace(/\s/g, ''))) {
         this.style.borderColor = 'red';
-        showAlert('Format de t√©l√©phone invalide', 'error');
+        showAlert('Format de tÈlÈphone invalide', 'error');
     } else {
         this.style.borderColor = '#e0e0e0';
     }
