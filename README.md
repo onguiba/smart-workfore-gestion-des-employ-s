@@ -1,32 +1,10 @@
-# 🚀 TSA SmartWorkforce AI™ — Déploiement Hostinger Simple
+# 🌐 TSA SmartWorkforce AI™ — Système Intelligent de Gestion RH
 
-Ce dépôt contient l'application complète, nettoyée et prête pour Hostinger.
+Application web complète de gestion des ressources humaines, pointage biométrique (reconnaissance faciale et manuelle), suivi des temps d'arrivée et de départ, congés, missions et paie.
 
-## 📦 Comment déployer en 3 étapes :
+## 🚀 Déploiement en 1 clic sur Hostinger
 
-### 1. Télécharger le ZIP depuis GitHub
-- Cliquez sur le bouton vert **`<> Code`** en haut à droite sur GitHub.
-- Cliquez sur **`Download ZIP`**.
-
-### 2. Uploader sur Hostinger
-1. Connectez-vous à votre panneau **Hostinger (hPanel)**.
-2. Ouvrez le **Gestionnaire de fichiers** (`public_html`).
-3. Uploadez le fichier ZIP téléchargé.
-4. Faites un clic droit sur le fichier ZIP > **Extraire**.
-5. Déplacez si besoin les fichiers directement à la racine de `public_html` :
-   - `.htaccess`
-   - `index.php`
-   - `index.html`
-   - `api/`
-   - `backend/`
-   - `frontend/`
-
-### 3. Base de données MySQL
-Le fichier `api/config.php` est déjà configuré avec les identifiants de votre base Hostinger :
-- **Base :** `u954610625_db_6LxveS47`
-- **Utilisateur :** `u954610625_usr_6LxveS47`
-
-Si vous souhaitez importer la structure SQL complète :
-- Allez dans **phpMyAdmin** sur Hostinger.
-- Sélectionnez la base de données.
-- Cliquez sur **Importer** et choisissez le fichier `backend/hostinger_database.sql`.
+1. **Télécharger :** Cliquez sur le bouton vert **`<> Code`** > **`Download ZIP`**.
+2. **Uploader :** Allez dans le **Gestionnaire de fichiers** de Hostinger > dossier `public_html`.
+3. **Extraire :** Uploadez le fichier ZIP et faites un **Clic droit > Extraire**.
+4. **Prêt :** Consultez `README_DEPLOIEMENT.txt` pour configurer votre base de données MySQL dans `api/config.php` si nécessaire (le système dispose également d'une base de secours automatique).
