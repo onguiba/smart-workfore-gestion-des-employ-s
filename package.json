@@ -1,10 +1,11 @@
 ﻿{
   "name": "smart-workforce-ai",
   "version": "1.0.0",
-  "description": "Smart Workforce AI - Système RH 100% Node.js & Base JSON Autonome",
-  "main": "server.js",
+  "description": "Smart Workforce AI - Architecture Frontend & Backend séparés (100% Node.js & Base JSON)",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js",
+    "backend": "node backend/server.js"
   },
   "engines": {
     "node": ">=18.0.0"

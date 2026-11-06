@@ -4,7 +4,7 @@ const path = require('path');
 const url = require('url');
 
 const PORT = process.env.PORT || 3000;
-const FRONTEND_DIR = __dirname;
+const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
 
 const MIME_TYPES = {
   '.html': 'text/html',

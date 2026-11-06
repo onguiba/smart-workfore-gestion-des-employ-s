@@ -1,6 +1,6 @@
 ﻿# ==============================================================================
-# TSA SmartWorkforce AI - Hostinger Node.js
-# 100% Node.js & Base JSON - Zero PHP
+# TSA SmartWorkforce AI - Hostinger Configuration
+# Architecture Frontend & Backend séparés
 # ==============================================================================
 
 RewriteEngine On
@@ -11,14 +11,21 @@ RewriteEngine On
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
 </IfModule>
 
-# Routage des requetes API vers Node.js
+# 1. Requêtes API routées vers Node.js
 <IfModule mod_proxy.c>
     RewriteCond %{REQUEST_URI} ^/api/ [NC]
     RewriteRule ^api/(.*)$ http://127.0.0.1:3000/api/$1 [P,L]
 </IfModule>
 
-DirectoryIndex index.html home.html
+# 2. Servir les fichiers frontend directement depuis frontend/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/frontend/ -f
+RewriteRule ^(.*)$ frontend/$1 [L]
 
+DirectoryIndex index.html frontend/home.html
+
+# 3. Sécurité : masquer les fichiers sensibles internes
 <FilesMatch "\.(env|json|log|sh|bat)$">
     <IfModule mod_authz_core.c>
         Require all denied

@@ -1,4 +1,5 @@
 ﻿/**
- * TSA SmartWorkforce AI - Point d'entrée direct racine Hostinger
+ * TSA SmartWorkforce AI - Point d'entrée Hostinger Node.js
+ * Démarre le serveur backend Node.js
  */
-require('./server.js');
+require('./backend/server.js');

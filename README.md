@@ -1,22 +1,37 @@
 ﻿# 🌐 TSA SmartWorkforce AI™ — Système Intelligent de Gestion RH
 
-Application web de gestion RH (Pointage biométrique Face ID, suivi Arrivée/Départ avec calcul automatique des heures travaillées, congés, paie, missions).
+Application web complète de gestion RH et de pointage biométrique (Face ID & manuel) construite en **100% Node.js pur avec Base de Données JSON autonome**.
 
 ---
 
-## ⚡ STRUCTURE DU PROJET (TOUT DANS UN SEUL DOSSIER UNIQUE)
+## 📁 ARCHITECTURE DU PROJET :
 
-Tous les fichiers (pages HTML, scripts JS, styles CSS, serveur Node.js et base de données JSON) sont désormais regroupés dans un **dossier unique prêt à l'emploi** :
-- index.html / home.html : Écrans d'accueil
-- ttendance.html & ttendance.js : Pointage biométrique Face ID & Arrivée/Départ
-- dashboard.html : Tableau de bord RH avec calcul des heures en direct
-- employee-portal.html : Espace personnel du collaborateur
-- server.js / pp.js : Serveur Node.js natif
-- data/database.json : Base de données JSON autonome (Zéro MySQL requis)
+`	ext
+smart-workfore-gestion-des-employ-s/
+├── frontend/               👉 Tous les écrans et styles de l'interface
+│   ├── home.html           (Accueil)
+│   ├── attendance.html     (Pointage biométrique Face ID & manuel)
+│   ├── dashboard.html      (Tableau de bord RH en direct avec heures et durées)
+│   ├── employee-portal.html(Espace personnel employé)
+│   ├── login.html, register.html
+│   ├── leaves.html, payroll.html, missions.html, tracking.html, chat.html
+│   ├── styles.css, professional-styles.css
+│   └── image/tsa.jpeg, tsa-logo.svg
+│
+├── backend/                👉 Moteur serveur et données
+│   ├── server.js           (Serveur Node.js natif et routes API)
+│   ├── database.js         (Gestionnaire de données)
+│   └── data/database.json  (Base de Données JSON persistante autonome - Zéro MySQL requis)
+│
+├── app.js                  👉 Lanceur racine Node.js
+├── package.json            👉 Configuration npm
+├── start.bat               👉 Démarrage direct en local
+└── .htaccess               👉 Configuration Hostinger
+`
 
 ---
 
-## 📦 DÉPLOIEMENT HOSTINGER EN 1 CLIC :
+## 📦 DÉPLOIEMENT HOSTINGER :
 1. Téléchargez le ZIP : cliquez sur **<> Code** > **Download ZIP**.
-2. Dans Hostinger **Gestionnaire de fichiers** (public_html), déposez et extrayez le ZIP.
-3. Démarrez l'application Node.js avec **server.js** (ou pp.js).
+2. Déposez et extrayez le ZIP dans votre dossier Hostinger (public_html).
+3. Démarrez l'application Node.js avec **pp.js**.

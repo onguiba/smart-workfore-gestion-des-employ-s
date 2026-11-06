@@ -1,11 +1,11 @@
 ﻿@echo off
 chcp 65001 >nul
-title TSA SmartWorkforce AI - Demarrage Direct
+title TSA SmartWorkforce AI - Serveur Node.js
 cd /d "%~dp0"
 echo ========================================================
-echo   TSA SmartWorkforce AI - Application Prete (Dossier Unique)
-echo   100%% Node.js - Base de Donnees JSON Autonome
+echo   TSA SmartWorkforce AI - Architecture Frontend / Backend
+echo   100%% Node.js & Base de Donnees JSON Autonome
 echo ========================================================
 echo.
-node server.js
+node app.js
 pause
