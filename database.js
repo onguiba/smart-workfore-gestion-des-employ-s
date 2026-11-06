@@ -253,7 +253,7 @@ module.exports = {
   init: async () => true,
   data: currentData,
   dataPath: dataPath,
-  
+
   // M�thodes d'ajout pour pointages et persistence
   addAttendanceRecord: async (record) => {
     currentData.attendanceRecords = currentData.attendanceRecords || [];
