@@ -2,7 +2,7 @@
 
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Node.js](https://img.shields.io/badge/Node.js-18-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 > Système complet de gestion RH avec reconnaissance faciale, pointage biométrique, gestion des congés, chat IA, tracking GPS et détection de fraude en temps réel.
@@ -58,8 +58,8 @@ docker-compose down
 # Voir les logs
 docker-compose logs -f
 
-# Sauvegarder la base de données
-docker-compose exec mysql mysqldump -u smartworkforce -p smart_workforce > backup.sql
+# Sauvegarder la base de données PostgreSQL
+docker-compose exec postgres pg_dump -U smartworkforce smart_workforce > backup.sql
 ```
 
 ## 📖 Documentation
@@ -82,7 +82,7 @@ docker-compose exec mysql mysqldump -u smartworkforce -p smart_workforce > backu
          │
          ▼
 ┌─────────────────┐
-│  MySQL (3306)   │  → Base de données
+│ PostgreSQL (5432)│  → Base de données
 └─────────────────┘
 ```
 
@@ -90,7 +90,7 @@ docker-compose exec mysql mysqldump -u smartworkforce -p smart_workforce > backu
 
 - **Frontend**: HTML5, CSS3, JavaScript vanilla
 - **Backend**: Node.js
-- **Base de données**: MySQL 8.0
+- **Base de données**: PostgreSQL 15
 - **Serveur web**: Nginx
 - **Containerisation**: Docker & Docker Compose
 - **CI/CD**: GitHub Actions

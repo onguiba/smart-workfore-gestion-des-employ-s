@@ -2,20 +2,19 @@ version: '3.8'
 
 # Configuration Docker Compose pour le développement
 services:
-  # MySQL Database
-  mysql:
-    image: mysql:8.0
-    container_name: smart-workforce-mysql-dev
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: smart-workforce-postgres-dev
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: smart_workforce_dev
-      MYSQL_USER: smartworkforce
-      MYSQL_PASSWORD: smartworkforce2026
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rootpassword}
+      POSTGRES_DB: ${DB_NAME:-smart_workforce_dev}
+      POSTGRES_USER: ${DB_USER:-smartworkforce}
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_dev_data:/var/lib/mysql
+      - postgres_dev_data:/var/lib/postgresql/data
       - ./backend/database.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - smart-workforce-dev
@@ -32,15 +31,15 @@ services:
     environment:
       PORT: 3000
       NODE_ENV: development
-      DB_DRIVER: mysql
-      DB_HOST: mysql
-      DB_PORT: 3306
-      DB_NAME: smart_workforce_dev
-      DB_USER: smartworkforce
-      DB_PASSWORD: smartworkforce2026
-      JWT_SECRET: swa_dev_token_key
+      DB_DRIVER: postgresql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-smart_workforce_dev}
+      DB_USER: ${DB_USER:-smartworkforce}
+      DB_PASSWORD: ${DB_PASSWORD:-smartworkforce2026}
+      JWT_SECRET: ${JWT_SECRET:-swa_dev_token_key}
     depends_on:
-      - mysql
+      - postgres
     networks:
       - smart-workforce-dev
     volumes:
@@ -51,7 +50,7 @@ services:
     command: npm run dev
 
 volumes:
-  mysql_dev_data:
+  postgres_dev_data:
 
 networks:
   smart-workforce-dev:

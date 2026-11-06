@@ -17,8 +17,7 @@
   "author": "Smart Workforce AI",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^18.0.9",
-    "mysql2": "^3.24.6",
-    "pg": "^8.23.1"
+    "dotenv": "^16.0.3",
+    "pg": "^8.11.3"
   }
 }

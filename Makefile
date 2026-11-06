@@ -89,10 +89,10 @@ stats: ## Voir l'utilisation des ressources
 # BASE DE DONNÉES
 # ==========================================
 
-db-backup: ## Sauvegarder la base de données
+db-backup: ## Sauvegarder la base de données PostgreSQL
 	@echo "💾 Sauvegarde de la base de données..."
 	@mkdir -p backups
-	@docker-compose exec -T mysql mysqldump -u smartworkforce -psmartworkforce2026 smart_workforce > backups/backup_$$(date +%Y%m%d_%H%M%S).sql
+	@docker-compose exec -T postgres pg_dump -U smartworkforce smart_workforce > backups/backup_$$(date +%Y%m%d_%H%M%S).sql
 	@echo "✅ Sauvegarde terminée dans backups/"
 
 db-restore: ## Restaurer la base de données (usage: make db-restore FILE=backup.sql)
@@ -101,12 +101,12 @@ db-restore: ## Restaurer la base de données (usage: make db-restore FILE=backup
 		exit 1; \
 	fi
 	@echo "📥 Restauration de la base de données depuis $(FILE)..."
-	@docker-compose exec -T mysql mysql -u smartworkforce -psmartworkforce2026 smart_workforce < $(FILE)
+	@docker-compose exec -T postgres psql -U smartworkforce smart_workforce < $(FILE)
 	@echo "✅ Restauration terminée!"
 
-db-shell: ## Ouvrir un shell MySQL
-	@echo "🔗 Connexion à MySQL..."
-	@docker-compose exec mysql mysql -u smartworkforce -psmartworkforce2026 smart_workforce
+db-shell: ## Ouvrir un shell PostgreSQL
+	@echo "🔗 Connexion à PostgreSQL..."
+	@docker-compose exec postgres psql -U smartworkforce smart_workforce
 
 db-reset: ## Réinitialiser la base de données (⚠️ supprime toutes les données)
 	@echo "⚠️  ATTENTION: Cette action va supprimer toutes les données!"

@@ -20,9 +20,9 @@ services:
       NODE_ENV: production
       
       # Base de données - Utiliser les variables d'environnement
-      DB_DRIVER: ${DB_DRIVER:-mysql}
-      DB_HOST: ${DB_HOST:-mysql}
-      DB_PORT: ${DB_PORT:-3306}
+      DB_DRIVER: ${DB_DRIVER:-postgresql}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
       DB_NAME: ${DB_NAME:-smart_workforce}
       DB_USER: ${DB_USER:-smartworkforce}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -74,33 +74,33 @@ services:
         max-file: "3"
         labels: "service=app,env=production"
 
-  # MySQL - Remplacer par RDS/Cloud SQL en production
-  mysql:
-    image: mysql:8.0
-    container_name: smart-workforce-mysql-prod
+  # PostgreSQL - Remplacer par RDS/Cloud SQL en production
+  postgres:
+    image: postgres:15-alpine
+    container_name: smart-workforce-postgres-prod
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME:-smart_workforce}
-      MYSQL_USER: ${DB_USER:-smartworkforce}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-smart_workforce}
+      POSTGRES_USER: ${DB_USER:-smartworkforce}
     ports:
-      - "${MYSQL_PORT:-3306}:3306"
+      - "${DB_PORT:-5432}:5432"
     volumes:
-      - mysql_prod_data:/var/lib/mysql
+      - postgres_prod_data:/var/lib/postgresql/data
       - ./backend/database.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - smart-workforce-prod
     
-    # Optimisations MySQL
+    # Optimisations PostgreSQL
     command: >
-      --default-authentication-plugin=mysql_native_password
-      --max_connections=200
-      --innodb_buffer_pool_size=512M
-      --innodb_log_file_size=128M
+      postgres
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c effective_cache_size=1GB
+      -c work_mem=4MB
     
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-smartworkforce}"]
       timeout: 20s
       retries: 10
       interval: 30s
@@ -187,7 +187,7 @@ services:
         max-file: "2"
 
 volumes:
-  mysql_prod_data:
+  postgres_prod_data:
     driver: local
   redis_data:
     driver: local

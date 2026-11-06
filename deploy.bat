@@ -113,10 +113,10 @@ echo [SUCCESS] Tous les services ont ete arretes
 goto end
 
 :backup_database
-echo [INFO] Sauvegarde de la base de donnees...
+echo [INFO] Sauvegarde de la base de donnees PostgreSQL...
 set BACKUP_FILE=backup_%date:~-4%%date:~3,2%%date:~0,2%_%time:~0,2%%time:~3,2%%time:~6,2%.sql
 set BACKUP_FILE=%BACKUP_FILE: =0%
-docker-compose exec -T mysql mysqldump -u smartworkforce -psmartworkforce2026 smart_workforce > %BACKUP_FILE%
+docker-compose exec -T postgres pg_dump -U smartworkforce smart_workforce > %BACKUP_FILE%
 echo [SUCCESS] Base de donnees sauvegardee dans: %BACKUP_FILE%
 goto end
 

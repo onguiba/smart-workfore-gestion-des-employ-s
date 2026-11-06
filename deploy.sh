@@ -133,11 +133,11 @@ stop_services() {
 
 # Sauvegarder la base de données
 backup_database() {
-    log_info "💾 Sauvegarde de la base de données..."
+    log_info "💾 Sauvegarde de la base de données PostgreSQL..."
     
     local backup_file="backup_$(date +%Y%m%d_%H%M%S).sql"
     
-    docker-compose exec -T mysql mysqldump -u smartworkforce -psmartworkforce2026 smart_workforce > "$backup_file"
+    docker-compose exec -T postgres pg_dump -U smartworkforce smart_workforce > "$backup_file"
     
     log_success "✅ Base de données sauvegardée dans: $backup_file"
 }
